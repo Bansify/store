@@ -474,7 +474,7 @@ export function SignInPrompt({ what }: { what: string }) {
         <div className="flex justify-center"><Logo subtitle={what} /></div>
         <h1 className="mt-6 font-display text-2xl font-semibold tracking-tight text-white">Sign in</h1>
         <p className="mt-2 text-sm leading-relaxed text-neutral-400">
-          One Gothwad Account for Mail, Drive, Store, and more. Sign in to continue to {what}.
+          One Bansify Account for Mail, Drive, Store, and more. Sign in to continue to {what}.
         </p>
         <button
           onClick={() => { void startGothwadSignIn(); }}

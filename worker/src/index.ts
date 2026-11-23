@@ -35,6 +35,7 @@ import {
   handleApkUpload,
   handleGetImage,
   handleImageUpload,
+  handleLatestApk,
 } from './routes/media';
 import {
   handleStoreAppDetail,
@@ -101,6 +102,11 @@ async function route(req: Request, env: Env, ctx?: ExecutionContext): Promise<Re
     return handleApkInspect(req, env);
   }
   if (path === '/api/uploads/apk' && method === 'POST') return handleApkUpload(req, env);
+  const dlLatestMatch = path.match(/^\/api\/dl\/([a-z0-9._-]+)$/i);
+  if (dlLatestMatch && method === 'GET') {
+    return handleLatestApk(req, env, dlLatestMatch[1]);
+  }
+
   const dlMatch = path.match(/^\/api\/download\/(.+)$/);
   if (dlMatch && method === 'GET') {
     return handleApkDownload(req, env, decodeURIComponent(dlMatch[1]));
