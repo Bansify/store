@@ -39,7 +39,7 @@ ACCOUNTS_API_URL = "https://api.bansify.com"
 AUTH_SIGNIN_URL = "https://accounts.bansify.com"
 ACCOUNTS_WEB_URL = "https://accounts.bansify.com"
 OAUTH_CLIENT_ID = "kiwi-store"
-ADMIN_USERNAMES = "pawan,pawangothwad"
+ADMIN_USERNAMES = "pawan"
 
 GITHUB_FILES_OWNER = "Bansify"
 GITHUB_FILES_REPO = "storefiles"

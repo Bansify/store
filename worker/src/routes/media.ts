@@ -357,6 +357,7 @@ export async function handleApkDownload(req: Request, env: Env, releaseId: strin
  */
 export async function handleLatestApk(req: Request, env: Env, repo: string): Promise<Response> {
   if (!/^[a-z0-9._-]{1,60}$/i.test(repo)) return err('bad_request', 'Invalid app key', 400);
+  try {
   const token = githubToken(env);
   const upstream = await fetch(`https://api.github.com/repos/Bansify/${repo}/releases/latest`, {
     headers: {
@@ -378,4 +379,8 @@ export async function handleLatestApk(req: Request, env: Env, repo: string): Pro
       'Access-Control-Allow-Origin': '*',
     },
   });
+  } catch (error) {
+    // Never leak a stack trace to the client, but do not swallow the reason either.
+    return json({ ok: false, error: 'release_lookup_failed', detail: String((error as Error)?.message ?? error) }, 502);
+  }
 }
