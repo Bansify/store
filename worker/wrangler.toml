@@ -11,10 +11,9 @@ compatibility_date = "2025-09-01"
 keep_vars = true
 
 routes = [
-  { pattern = "kiwistore.gothwadtech.com/api/*", zone_name = "gothwadtech.com" },
-  { pattern = "kiwiconsole.gothwadtech.com/api/*", zone_name = "gothwadtech.com" },
-  { pattern = "kiwiadmin.gothwadtech.com/api/*", zone_name = "gothwadtech.com" },
-  { pattern = "kiwiapp.gothwadtech.com/api/*", zone_name = "gothwadtech.com" }
+  { pattern = "store.bansify.com/api/*", zone_name = "bansify.com" },
+  { pattern = "storeconsole.bansify.com/api/*", zone_name = "bansify.com" },
+  { pattern = "storeadmin.bansify.com/api/*", zone_name = "bansify.com" }
 ]
 
 [[d1_databases]]
@@ -25,26 +24,26 @@ database_id = "a3dc3e71-cf89-4e0a-89d1-693fcf6f227a"
 [vars]
 APP_NAME = "Kiwi Store"
 APP_SHORT_NAME = "Kiwi"
-ECOSYSTEM_NAME = "Gothwad"
-APP_DOMAIN = "gothwadtech.com"
+ECOSYSTEM_NAME = "Bansify"
+APP_DOMAIN = "bansify.com"
 STOREAPP_PACKAGE = "com.gothwad.store"
 
-STORE_HOST = "kiwistore"
-CONSOLE_HOST = "kiwiconsole"
-ADMIN_HOST = "kiwiadmin"
-STOREAPP_HOST = "kiwiapp"
-STORE_PUBLIC_URL = "https://kiwistore.gothwadtech.com"
+STORE_HOST = "store"
+CONSOLE_HOST = "storeconsole"
+ADMIN_HOST = "storeadmin"
+STOREAPP_HOST = "store"
+STORE_PUBLIC_URL = "https://store.bansify.com"
 
-AUTH_HUB_URL = "https://api.gothwadtech.com"
-ACCOUNTS_API_URL = "https://api.gothwadtech.com"
-AUTH_SIGNIN_URL = "https://accounts.gothwadtech.com"
-ACCOUNTS_WEB_URL = "https://accounts.gothwadtech.com"
+AUTH_HUB_URL = "https://api.bansify.com"
+ACCOUNTS_API_URL = "https://api.bansify.com"
+AUTH_SIGNIN_URL = "https://accounts.bansify.com"
+ACCOUNTS_WEB_URL = "https://accounts.bansify.com"
 OAUTH_CLIENT_ID = "kiwi-store"
 ADMIN_USERNAMES = "pawan,pawangothwad"
 
-GITHUB_FILES_OWNER = "GothwadTech"
+GITHUB_FILES_OWNER = "Bansify"
 GITHUB_FILES_REPO = "storefiles"
-GITHUB_REPO = "GothwadTech/storefiles"
+GITHUB_REPO = "Bansify/storefiles"
 GITHUB_BRANCH = "main"
 
 ALLOWED_ORIGINS = ""

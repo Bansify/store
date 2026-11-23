@@ -6,7 +6,7 @@ Anyone with a **Gothwad Account** can publish Android apps and games on **Kiwi S
 
 ## 1. Register as a Developer
 
-1. Open **`https://kiwiconsole.gothwadtech.com`**.
+1. Open **`https://storeconsole.bansify.com`**.
 2. If you are already signed in to any Gothwad service (`accounts`, `mail`, `kiwistore`), your session is detected automatically via silent SSO. Otherwise, click **Sign in**.
 3. Complete the one-time developer registration form (Display Name, Organization Name, Support Email, optional Website). There are no registration fees.
 
@@ -29,7 +29,7 @@ Anyone with a **Gothwad Account** can publish Android apps and games on **Kiwi S
 
 1. Open the **Releases** tab for your app and select your signed `.apk` file (`<= 50 MB`).
 2. Kiwi Console automatically inspects the binary `AndroidManifest.xml` inside the APK to pre-fill `packageName`, `versionCode`, `versionName`, `minSdk`, `targetSdk`, and requested Android permissions.
-3. Add release notes (changelog) and upload the APK. Live byte-level upload progress is shown while the Worker uploads the binary to GitHub Releases (`GothwadTech/storefiles`).
+3. Add release notes (changelog) and upload the APK. Live byte-level upload progress is shown while the Worker uploads the binary to GitHub Releases (`Bansify/storefiles`).
 4. Click **Submit for review** to send the release to the Kiwi Admin moderation queue.
 
 ---

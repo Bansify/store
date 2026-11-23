@@ -32,13 +32,13 @@ test('default brand is Kiwi Store on the kiwi* hostnames', () => {
   assert.equal(brand.appName, 'Kiwi Store');
   assert.equal(brand.shortName, 'Kiwi');
   assert.equal(brand.oauthClientId, 'kiwi-store');
-  assert.equal(brand.accountsApiUrl, 'https://api.gothwadtech.com');
-  assert.equal(brand.accountsSignInUrl, 'https://accounts.gothwadtech.com');
+  assert.equal(brand.accountsApiUrl, 'https://api.bansify.com');
+  assert.equal(brand.accountsSignInUrl, 'https://accounts.bansify.com');
   assert.deepEqual(brand.siteUrls, {
-    store: 'https://kiwistore.gothwadtech.com',
-    console: 'https://kiwiconsole.gothwadtech.com',
-    admin: 'https://kiwiadmin.gothwadtech.com',
-    storeapp: 'https://kiwiapp.gothwadtech.com',
+    store: 'https://store.bansify.com',
+    console: 'https://storeconsole.bansify.com',
+    admin: 'https://storeadmin.bansify.com',
+    storeapp: 'https://store.bansify.com',
   });
   assert.deepEqual(DEFAULT_SITE_HOSTS, {
     store: 'kiwistore',
@@ -59,20 +59,20 @@ test('worker env (no VITE_ prefix) resolves the same four sites', () => {
   const brand = resolveBrand(
     {
       APP_NAME: 'Kiwi Store',
-      APP_DOMAIN: 'gothwadtech.com',
+      APP_DOMAIN: 'bansify.com',
       STORE_HOST: 'kiwistore',
       CONSOLE_HOST: 'kiwiconsole',
       ADMIN_HOST: 'kiwiadmin',
       STOREAPP_HOST: 'kiwiapp',
-      AUTH_SIGNIN_URL: 'https://accounts.gothwadtech.com',
-      AUTH_HUB_URL: 'https://api.gothwadtech.com',
+      AUTH_SIGNIN_URL: 'https://accounts.bansify.com',
+      AUTH_HUB_URL: 'https://api.bansify.com',
       OAUTH_CLIENT_ID: 'kiwi-store',
     },
     { prefix: '' },
   );
-  assert.equal(brand.siteUrls.console, 'https://kiwiconsole.gothwadtech.com');
-  assert.equal(brand.accountsHost, 'accounts.gothwadtech.com');
-  assert.equal(brand.accountsApiUrl, 'https://api.gothwadtech.com');
+  assert.equal(brand.siteUrls.console, 'https://storeconsole.bansify.com');
+  assert.equal(brand.accountsHost, 'accounts.bansify.com');
+  assert.equal(brand.accountsApiUrl, 'https://api.bansify.com');
   assert.equal(brand.oauthClientId, 'kiwi-store');
 });
 
@@ -98,12 +98,12 @@ test('a full URL override wins over host + domain', () => {
 
 test('hostname detection follows the configured hosts (no hardcoded prefixes)', () => {
   const brand = resolveBrand({});
-  assert.equal(modeForHost('kiwiadmin.gothwadtech.com', brand), 'admin');
-  assert.equal(modeForHost('KIWISTORE.gothwadtech.com.', brand), 'store');
-  assert.equal(modeForHost('kiwiapp.gothwadtech.com', brand), 'storeapp');
+  assert.equal(modeForHost('storeadmin.bansify.com', brand), 'admin');
+  assert.equal(modeForHost('KIWISTORE.bansify.com.', brand), 'store');
+  assert.equal(modeForHost('store.bansify.com', brand), 'storeapp');
   assert.equal(modeForHost('anything.pages.dev', brand), null);
   // Legacy domains are not matched as production surfaces; preview/local gating relies on this.
-  assert.equal(modeForHost('store.gothwadtech.com', brand), null);
+  assert.equal(modeForHost('store.bansify.com', brand), null);
 });
 
 test('manifest, SEO copy and index.html tokens all follow the app name', () => {
@@ -120,7 +120,7 @@ test('manifest, SEO copy and index.html tokens all follow the app name', () => {
   const html = renderIndexHtml(read('index.html'), brand);
   assert.doesNotMatch(html, /%[A-Z][A-Z0-9_]*%/, 'unresolved token left in index.html');
   assert.ok(html.includes('<title>Mango Store | Android Apps &amp; Games</title>'));
-  assert.ok(html.includes('content="https://kiwistore.gothwadtech.com/"'));
+  assert.ok(html.includes('content="https://store.bansify.com/"'));
   assert.doesNotMatch(html, /Gothwad Store/);
 });
 
@@ -138,7 +138,7 @@ test('app and worker source hardcode no production URL', () => {
     assert.doesNotMatch(
       source,
       /https?:\/\/[a-z0-9.-]*gothwadtech\.com/i,
-      `${file} hardcodes a gothwadtech.com URL - use shared/brand.ts + env`,
+      `${file} hardcodes a bansify.com URL - use shared/brand.ts + env`,
     );
     assert.doesNotMatch(
       source,
@@ -153,7 +153,7 @@ test('worker config uses the kiwi hosts and keeps the same worker name', () => {
   assert.match(toml, /^name = "store"$/m, 'Worker ka naam "store" hi rehna chahiye');
   for (const [key, value] of Object.entries({
     APP_NAME: 'Kiwi Store',
-    APP_DOMAIN: 'gothwadtech.com',
+    APP_DOMAIN: 'bansify.com',
     STORE_HOST: 'kiwistore',
     CONSOLE_HOST: 'kiwiconsole',
     ADMIN_HOST: 'kiwiadmin',

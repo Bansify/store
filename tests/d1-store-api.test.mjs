@@ -15,10 +15,10 @@ async function freshEnv(extra = {}) {
   await DB.exec(bootstrapSql);
   return {
     DB,
-    AUTH_HUB_URL: 'https://api.gothwadtech.com',
+    AUTH_HUB_URL: 'https://api.bansify.com',
     ADMIN_USERNAMES: 'pawangothwad',
     GITHUB_TOKEN: 'gh-test-token',
-    GITHUB_FILES_REPO: 'GothwadTech/storefiles',
+    GITHUB_FILES_REPO: 'Bansify/storefiles',
     ...extra,
   };
 }
@@ -66,21 +66,21 @@ test('D1 SQL bootstrap and schema are idempotent, create 13 tables, seed 12 cate
 test('Public Store Catalog endpoints satisfy web and Android storeapp contracts', async () => {
   const env = await freshEnv();
 
-  const healthRes = await worker.fetch(new Request('https://store.gothwadtech.com/api/health'), env);
+  const healthRes = await worker.fetch(new Request('https://store.bansify.com/api/health'), env);
   assert.equal(healthRes.status, 200);
   const health = await healthRes.json();
   assert.equal(health.ok, true);
   assert.equal(health.engine, 'cloudflare-d1');
   assert.equal(health.configured.d1, true);
 
-  const catsRes = await worker.fetch(new Request('https://store.gothwadtech.com/api/store/categories'), env);
+  const catsRes = await worker.fetch(new Request('https://store.bansify.com/api/store/categories'), env);
   assert.equal(catsRes.status, 200);
   const cats = await catsRes.json();
   assert.equal(cats.source, 'live');
   assert.equal(cats.categories.length, 12);
 
   for (const endpoint of ['/api/store/apps', '/api/store/home', '/api/store/charts', '/api/store/search?q=mail']) {
-    const res = await worker.fetch(new Request(`https://store.gothwadtech.com${endpoint}`), env);
+    const res = await worker.fetch(new Request(`https://store.bansify.com${endpoint}`), env);
     assert.equal(res.status, 200, endpoint);
     const data = await res.json();
     assert.equal(data.source, 'live');
@@ -90,7 +90,7 @@ test('Public Store Catalog endpoints satisfy web and Android storeapp contracts'
   }
 
   const byPkgRes = await worker.fetch(
-    new Request('https://store.gothwadtech.com/api/store/apps/com.gothwad.store'),
+    new Request('https://store.bansify.com/api/store/apps/com.gothwad.store'),
     env,
   );
   assert.equal(byPkgRes.status, 200);
@@ -121,8 +121,8 @@ test('Auth & Multi-Account SSO: Cookie + X-Gothwad-Authuser, Set-Cookie rotation
         return Response.json({ authenticated: false }, { status: 401 });
       }
       const resHeaders = new Headers({ 'Content-Type': 'application/json' });
-      resHeaders.append('Set-Cookie', 'gothwad_slot_a=rotated1; Domain=.gothwadtech.com; Path=/; HttpOnly; Secure');
-      resHeaders.append('Set-Cookie', 'gothwad_active=b; Domain=.gothwadtech.com; Path=/; Secure');
+      resHeaders.append('Set-Cookie', 'gothwad_slot_a=rotated1; Domain=.bansify.com; Path=/; HttpOnly; Secure');
+      resHeaders.append('Set-Cookie', 'gothwad_active=b; Domain=.bansify.com; Path=/; Secure');
       return new Response(
         JSON.stringify({
           authenticated: true,
@@ -131,12 +131,12 @@ test('Auth & Multi-Account SSO: Cookie + X-Gothwad-Authuser, Set-Cookie rotation
           user: {
             id: 'usr-pawan',
             username: 'pawangothwad',
-            email: 'pawan@gothwadtech.com',
+            email: 'pawan@bansify.com',
             name: 'Pawan Gothwad',
           },
           accounts: [
-            { id: 'a', authuser: 0, username: 'dev1', email: 'dev1@gothwadtech.com', name: 'Dev One', active: false },
-            { id: 'b', authuser: 1, username: 'pawangothwad', email: 'pawan@gothwadtech.com', name: 'Pawan Gothwad', active: true },
+            { id: 'a', authuser: 0, username: 'dev1', email: 'dev1@bansify.com', name: 'Dev One', active: false },
+            { id: 'b', authuser: 1, username: 'pawangothwad', email: 'pawan@bansify.com', name: 'Pawan Gothwad', active: true },
           ],
         }),
         { status: 200, headers: resHeaders },
@@ -147,7 +147,7 @@ test('Auth & Multi-Account SSO: Cookie + X-Gothwad-Authuser, Set-Cookie rotation
         return Response.json({
           sub: 'usr-android',
           preferred_username: 'androiduser',
-          email: 'android@gothwadtech.com',
+          email: 'android@bansify.com',
           name: 'Android User',
         });
       }
@@ -169,9 +169,9 @@ test('Auth & Multi-Account SSO: Cookie + X-Gothwad-Authuser, Set-Cookie rotation
   });
 
   const meRes = await worker.fetch(
-    new Request('https://kiwistore.gothwadtech.com/api/me', {
+    new Request('https://store.bansify.com/api/me', {
       headers: {
-        Origin: 'https://kiwistore.gothwadtech.com',
+        Origin: 'https://store.bansify.com',
         Cookie: 'gothwad_session=valid',
         'X-Gothwad-Authuser': '1',
       },
@@ -191,7 +191,7 @@ test('Auth & Multi-Account SSO: Cookie + X-Gothwad-Authuser, Set-Cookie rotation
   assert.equal(meBody.accounts.length, 2);
 
   const outageRes = await worker.fetch(
-    new Request('https://kiwistore.gothwadtech.com/api/auth/accounts', {
+    new Request('https://store.bansify.com/api/auth/accounts', {
       headers: { Cookie: 'gothwad_outage=1' },
     }),
     env,
@@ -199,7 +199,7 @@ test('Auth & Multi-Account SSO: Cookie + X-Gothwad-Authuser, Set-Cookie rotation
   assert.equal(outageRes.status, 503);
 
   const bearerRes = await worker.fetch(
-    new Request('https://kiwistore.gothwadtech.com/api/me', {
+    new Request('https://store.bansify.com/api/me', {
       headers: { Authorization: 'Bearer android-token' },
     }),
     env,
@@ -210,7 +210,7 @@ test('Auth & Multi-Account SSO: Cookie + X-Gothwad-Authuser, Set-Cookie rotation
   assert.equal(bearerBody.isAdmin, false);
 
   const switchRes = await worker.fetch(
-    new Request('https://kiwistore.gothwadtech.com/api/auth/switch', {
+    new Request('https://store.bansify.com/api/auth/switch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Cookie: 'gothwad_session=valid' },
       body: JSON.stringify({ authuser: 0 }),
@@ -221,7 +221,7 @@ test('Auth & Multi-Account SSO: Cookie + X-Gothwad-Authuser, Set-Cookie rotation
   assert.ok(switchRes.headers.getSetCookie().some((c) => c.includes('gothwad_active=a')));
 
   const slotOutRes = await worker.fetch(
-    new Request('https://kiwistore.gothwadtech.com/api/auth/accounts/a/signout', {
+    new Request('https://store.bansify.com/api/auth/accounts/a/signout', {
       method: 'POST',
       headers: { Cookie: 'gothwad_session=valid' },
     }),
@@ -238,14 +238,14 @@ test('Store User Actions: wishlist, library, reviews with live rating recalculat
     Response.json({
       sub: 'usr-1',
       preferred_username: 'rahul',
-      email: 'rahul@gothwadtech.com',
+      email: 'rahul@bansify.com',
       name: 'Rahul',
     }),
   );
   const authHeaders = { Authorization: 'Bearer tok-rahul', 'Content-Type': 'application/json' };
 
   const wishAdd = await worker.fetch(
-    new Request('https://store.gothwadtech.com/api/store/apps/app-kiwi-store/wishlist', {
+    new Request('https://store.bansify.com/api/store/apps/app-kiwi-store/wishlist', {
       method: 'POST',
       headers: authHeaders,
     }),
@@ -253,24 +253,24 @@ test('Store User Actions: wishlist, library, reviews with live rating recalculat
   );
   assert.equal(wishAdd.status, 200);
   const wishList = await (
-    await worker.fetch(new Request('https://store.gothwadtech.com/api/store/wishlist', { headers: authHeaders }), env)
+    await worker.fetch(new Request('https://store.bansify.com/api/store/wishlist', { headers: authHeaders }), env)
   ).json();
   assert.deepEqual(wishList.appIds, ['app-kiwi-store']);
 
   await worker.fetch(
-    new Request('https://store.gothwadtech.com/api/store/apps/app-kiwi-store/wishlist', {
+    new Request('https://store.bansify.com/api/store/apps/app-kiwi-store/wishlist', {
       method: 'DELETE',
       headers: authHeaders,
     }),
     env,
   );
   const wishAfter = await (
-    await worker.fetch(new Request('https://store.gothwadtech.com/api/store/wishlist', { headers: authHeaders }), env)
+    await worker.fetch(new Request('https://store.bansify.com/api/store/wishlist', { headers: authHeaders }), env)
   ).json();
   assert.deepEqual(wishAfter.appIds, []);
 
   const libAdd = await worker.fetch(
-    new Request('https://store.gothwadtech.com/api/store/apps/com.gothwad.mail/library', {
+    new Request('https://store.bansify.com/api/store/apps/com.gothwad.mail/library', {
       method: 'POST',
       headers: authHeaders,
       body: JSON.stringify({ versionCode: 102 }),
@@ -279,12 +279,12 @@ test('Store User Actions: wishlist, library, reviews with live rating recalculat
   );
   assert.equal(libAdd.status, 200);
   const libList = await (
-    await worker.fetch(new Request('https://store.gothwadtech.com/api/store/library', { headers: authHeaders }), env)
+    await worker.fetch(new Request('https://store.bansify.com/api/store/library', { headers: authHeaders }), env)
   ).json();
   assert.deepEqual(libList.appIds, ['app-gothwad-mail']);
 
   const revAdd = await worker.fetch(
-    new Request('https://store.gothwadtech.com/api/store/apps/app-kiwi-store/reviews', {
+    new Request('https://store.bansify.com/api/store/apps/app-kiwi-store/reviews', {
       method: 'POST',
       headers: authHeaders,
       body: JSON.stringify({ rating: 5, title: 'Superb', body: 'Fast and clean D1 store!' }),
@@ -299,7 +299,7 @@ test('Store User Actions: wishlist, library, reviews with live rating recalculat
   assert.equal(appAfterRev.rating_avg, 5);
 
   const revDel = await worker.fetch(
-    new Request('https://store.gothwadtech.com/api/store/apps/app-kiwi-store/reviews', {
+    new Request('https://store.bansify.com/api/store/apps/app-kiwi-store/reviews', {
       method: 'DELETE',
       headers: authHeaders,
     }),
@@ -312,7 +312,7 @@ test('Store User Actions: wishlist, library, reviews with live rating recalculat
   assert.equal(appAfterDel.rating_count, 0);
 
   const repRes = await worker.fetch(
-    new Request('https://store.gothwadtech.com/api/store/apps/app-kiwi-store/report', {
+    new Request('https://store.bansify.com/api/store/apps/app-kiwi-store/report', {
       method: 'POST',
       headers: authHeaders,
       body: JSON.stringify({ reason: 'Other', details: 'Test report' }),

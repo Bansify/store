@@ -36,7 +36,7 @@ function app(
     iconUrl: iconPlaceholder(partial.name, partial.iconColor),
     screenshots: [shot(partial.id + '1'), shot(partial.id + '2'), shot(partial.id + '3')],
     tags: [],
-    supportEmail: 'support@gothwadtech.com',
+    supportEmail: 'support@bansify.com',
     ratingAvg: 4.2,
     ratingCount: 1200,
     downloadsCount: 50_000,
