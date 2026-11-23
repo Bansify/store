@@ -34,7 +34,7 @@ export const BRAND_DEFAULTS = {
   shortName: 'Kiwi',
   appDomain: 'bansify.com',
   /** Parent ecosystem name across Mail, Drive, Store, and Accounts. */
-  ecosystemName: 'Gothwad',
+  ecosystemName: 'Bansify',
   /** Native Android client package name. */
   storeappPackage: 'com.gothwad.store',
   accountsApiUrl: 'https://api.bansify.com',
