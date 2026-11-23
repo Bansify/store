@@ -23,10 +23,10 @@ export const SITE_MODES: { id: SiteMode; label: string }[] = [
 
 /** Default subdomain per surface. Full URL = https://<host>.<appDomain>. */
 export const DEFAULT_SITE_HOSTS: Record<SiteMode, string> = {
-  store: 'kiwistore',
-  console: 'kiwiconsole',
-  admin: 'kiwiadmin',
-  storeapp: 'kiwiapp',
+  store: 'store',
+  console: 'storeconsole',
+  admin: 'storeadmin',
+  storeapp: 'store',
 };
 
 export const BRAND_DEFAULTS = {
@@ -36,7 +36,7 @@ export const BRAND_DEFAULTS = {
   /** Parent ecosystem name across Mail, Drive, Store, and Accounts. */
   ecosystemName: 'Bansify',
   /** Native Android client package name. */
-  storeappPackage: 'com.gothwad.store',
+  storeappPackage: 'com.bansify.store',
   accountsApiUrl: 'https://api.bansify.com',
   accountsSignInUrl: 'https://accounts.bansify.com',
   oauthClientId: 'kiwi-store',
