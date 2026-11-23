@@ -349,3 +349,33 @@ export async function handleApkDownload(req: Request, env: Env, releaseId: strin
   if (batchStmts.length > 0) await env.DB.batch(batchStmts);
   return new Response(null, { status: 302, headers: { Location: str(rel.apk_url) } });
 }
+
+
+/**
+ * Stable download link for an app: `/api/dl/<repo>` always redirects to the APK in
+ * that repository's newest GitHub release. Hub links therefore never pin a version.
+ */
+export async function handleLatestApk(req: Request, env: Env, repo: string): Promise<Response> {
+  if (!/^[a-z0-9._-]{1,60}$/i.test(repo)) return err('bad_request', 'Invalid app key', 400);
+  const token = githubToken(env);
+  const upstream = await fetch(`https://api.github.com/repos/Bansify/${repo}/releases/latest`, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      'User-Agent': 'bansify-store',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    cf: { cacheTtl: 300, cacheEverything: true },
+  });
+  if (!upstream.ok) return err('not_found', 'No release found for this app', 404);
+  const data = (await upstream.json()) as { assets?: Array<{ name: string; browser_download_url: string }> };
+  const asset = (data.assets ?? []).find((a) => /\.apk$/i.test(a.name) && !/unsigned|debug/i.test(a.name));
+  if (!asset) return err('not_found', 'No APK in the latest release', 404);
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: asset.browser_download_url,
+      'Cache-Control': 'public, max-age=300',
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+}
