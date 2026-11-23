@@ -1,6 +1,6 @@
 # 🚀 SETUP & DEPLOYMENT GUIDE — Kiwi Store
 
-All infrastructure runs on **Cloudflare** (D1 + Workers + Pages + Edge Cache) and **GitHub Releases** (`GothwadTech/storefiles`) with zero credit-card-gated services.
+All infrastructure runs on **Cloudflare** (D1 + Workers + Pages + Edge Cache) and **GitHub Releases** (`Bansify/storefiles`) with zero credit-card-gated services.
 
 ---
 
@@ -23,15 +23,15 @@ npx wrangler d1 execute store --remote --file=../sql/00_d1_console_bootstrap.sql
 
 ---
 
-## 2. Gothwad Accounts Registration (`GothwadTech/accounts`)
+## 2. Gothwad Accounts Registration (`Bansify/accounts`)
 
-Ensure the `kiwi-store` client and first-party `*.gothwadtech.com` origins are registered in `GothwadTech/accounts`. All `*.gothwadtech.com` origins share the `.gothwadtech.com` SSO cookies automatically and can call `https://api.gothwadtech.com/api/auth/*` with `credentials: 'include'`.
+Ensure the `kiwi-store` client and first-party `*.bansify.com` origins are registered in `Bansify/accounts`. All `*.bansify.com` origins share the `.bansify.com` SSO cookies automatically and can call `https://api.bansify.com/api/auth/*` with `credentials: 'include'`.
 
 ---
 
-## 3. GitHub APK Storage Secret (`GothwadTech/storefiles`)
+## 3. GitHub APK Storage Secret (`Bansify/storefiles`)
 
-Create a fine-grained GitHub Personal Access Token with **Contents: Read & Write** permission on `GothwadTech/storefiles`, then configure it on the Worker:
+Create a fine-grained GitHub Personal Access Token with **Contents: Read & Write** permission on `Bansify/storefiles`, then configure it on the Worker:
 
 ```bash
 cd worker
@@ -45,7 +45,7 @@ npx wrangler secret put GITHUB_TOKEN
 ## 4. Deploy Worker & Pages
 
 ### Deploy Worker (`kiwi-store-api`)
-`worker/wrangler.toml` includes active `routes = [...]` for all 4 production subdomains (`kiwistore`, `kiwiconsole`, `kiwiadmin`, `kiwiapp` `/api/*` on `zone_name = "gothwadtech.com"`):
+`worker/wrangler.toml` includes active `routes = [...]` for all 4 production subdomains (`kiwistore`, `kiwiconsole`, `kiwiadmin`, `kiwiapp` `/api/*` on `zone_name = "bansify.com"`):
 
 ```bash
 cd worker
@@ -54,11 +54,11 @@ npm run deploy
 ```
 
 ### Deploy Frontend (Cloudflare Pages)
-Connect `GothwadTech/store` to Cloudflare Pages:
+Connect `Bansify/store` to Cloudflare Pages:
 - **Build command**: `npm run build`
 - **Build output directory**: `dist`
 - **Custom domains**:
-  - `kiwistore.gothwadtech.com`
-  - `kiwiconsole.gothwadtech.com`
-  - `kiwiadmin.gothwadtech.com`
-  - `kiwiapp.gothwadtech.com`
+  - `store.bansify.com`
+  - `storeconsole.bansify.com`
+  - `storeadmin.bansify.com`
+  - `store.bansify.com`

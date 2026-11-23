@@ -4,12 +4,12 @@ A single codebase powering all **4 web surfaces** of the Kiwi Store platform (`s
 
 | Surface | Default Domain | Purpose |
 |---|---|---|
-| **Kiwi Store** | `https://kiwistore.gothwadtech.com` | Public Android app & game store (Kiwi Store D1 + F-Droid Open Source catalog, search, details, reviews, library, wishlist, direct APK downloads) |
-| **Kiwi Console** | `https://kiwiconsole.gothwadtech.com` | Developer portal (free registration, app creation, APK upload to GitHub Releases with auto-manifest inspection, D1 + Edge Cache WebP image uploads, review replies, analytics) |
-| **Kiwi Admin** | `https://kiwiadmin.gothwadtech.com` | Moderation dashboard (manual APK review queue, approve/reject, suspend/restore, abuse reports) |
-| **Kiwi Store App** | `https://kiwiapp.gothwadtech.com` | Landing page to download the native Kiwi Store Android client APK (`com.gothwad.store`) |
+| **Kiwi Store** | `https://store.bansify.com` | Public Android app & game store (Kiwi Store D1 + F-Droid Open Source catalog, search, details, reviews, library, wishlist, direct APK downloads) |
+| **Kiwi Console** | `https://storeconsole.bansify.com` | Developer portal (free registration, app creation, APK upload to GitHub Releases with auto-manifest inspection, D1 + Edge Cache WebP image uploads, review replies, analytics) |
+| **Kiwi Admin** | `https://storeadmin.bansify.com` | Moderation dashboard (manual APK review queue, approve/reject, suspend/restore, abuse reports) |
+| **Kiwi Store App** | `https://store.bansify.com` | Landing page to download the native Kiwi Store Android client APK (`com.gothwad.store`) |
 
-The native Android client lives in [`GothwadTech/storeapp`](https://github.com/GothwadTech/storeapp) and communicates with this same Worker API (`/api/*`).
+The native Android client lives in [`Bansify/storeapp`](https://github.com/Bansify/storeapp) and communicates with this same Worker API (`/api/*`).
 
 > **Brand names and domains are never hardcoded in components.** All defaults live in `shared/brand.ts` and can be overridden via environment variables (`VITE_APP_NAME`, `VITE_APP_DOMAIN`, `APP_NAME`, `APP_DOMAIN`, `*_HOST`).
 
@@ -29,7 +29,7 @@ The native Android client lives in [`GothwadTech/storeapp`](https://github.com/G
 
 ---
 
-## 🔐 Fast Identity Startup, `.gothwadtech.com` Silent SSO & Universal Account Switcher
+## 🔐 Fast Identity Startup, `.bansify.com` Silent SSO & Universal Account Switcher
 
 - **Decoupled Identity, Authorization, Catalog, and Surface Data Readiness**:
   - Public Store catalog (`GET /api/store/apps?fdroid=1` + `GET /api/store/categories`) and identity verification (`GET /api/me?light=1` / `GET /api/auth/session`) run independently and concurrently.
@@ -38,9 +38,9 @@ The native Android client lives in [`GothwadTech/storeapp`](https://github.com/G
 - **Silent First-Party SSO & Resilient Error Semantics**:
   - Authoritative `401` or `authenticated: false` responses from `/api/me` resolve immediately as `anonymous` without redundant fallback requests.
   - Network failures, `429`, `5xx`, and HTML responses resolve as `unavailable` with local retry controls (never falsely treating transient outages as signed-out or redirecting to `/signin`).
-  - When direct Accounts fallback (`GET https://accounts.gothwadtech.com/api/auth/accounts`) verifies identity while the Store Worker is unreachable, the client retains the verified identity while marking Store permissions/workspace `unavailable` (never manufacturing false "not admin" or "create developer profile" states).
+  - When direct Accounts fallback (`GET https://accounts.bansify.com/api/auth/accounts`) verifies identity while the Store Worker is unreachable, the client retains the verified identity while marking Store permissions/workspace `unavailable` (never manufacturing false "not admin" or "create developer profile" states).
 - **Universal Account Menu (`window.GothwadAccountMenu`)**:
-  - Clicking the top-right profile avatar opens the Google-style Account Sheet (`https://accounts.gothwadtech.com/widget/account-menu.js` with offline Shadow-DOM fallback), supporting up to **6 simultaneous signed-in accounts** (`/u/0`..`/u/5`, `?authuser=N`, `X-Gothwad-Authuser`).
+  - Clicking the top-right profile avatar opens the Google-style Account Sheet (`https://accounts.bansify.com/widget/account-menu.js` with offline Shadow-DOM fallback), supporting up to **6 simultaneous signed-in accounts** (`/u/0`..`/u/5`, `?authuser=N`, `X-Gothwad-Authuser`).
 
 ---
 
@@ -70,5 +70,5 @@ npm run dev       # http://localhost:8787
 |---|---|---|
 | **Metadata, Catalog, Reviews, Submissions** | **Cloudflare D1** (`store`, `a3dc3e71-cf89-4e0a-89d1-693fcf6f227a`) | Worker SQLite queries (`/api/store/*`, `/api/dev/*`, `/api/admin/*`) |
 | **Icons, Screenshots, Banners (`<= 380 KB` WebP)** | **Cloudflare D1 `store_images` BLOB** + **Cloudflare Edge Cache (`caches.default`)** | `GET /api/images/:id` (`Cache-Control: public, max-age=31536000, immutable`, `ETag`) |
-| **First-Party & Third-Party APKs (`<= 50 MB`)** | **GitHub Releases** (`GothwadTech/storefiles`) | `GET /api/download/:releaseId` (`302` redirect + download tracking) |
+| **First-Party & Third-Party APKs (`<= 50 MB`)** | **GitHub Releases** (`Bansify/storefiles`) | `GET /api/download/:releaseId` (`302` redirect + download tracking) |
 | **Open-Source Catalog & APKs (`fdroid:<pkg>`)** | **F-Droid Official Repository** + **Cloudflare Edge Cache (`caches.default`)** | `GET /api/store/fdroid`, `GET /api/store/apps?fdroid=1`, `GET /api/download/fdroid:<pkg>` |

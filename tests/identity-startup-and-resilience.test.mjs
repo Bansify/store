@@ -27,7 +27,7 @@ test('Worker /api/auth/session and /api/me?light=1 return verified identity + is
   try {
     globalThis.fetch = async (input, init) => {
       const url = typeof input === 'string' ? input : input.url;
-      if (url === 'https://accounts.gothwadtech.com/api/auth/me') {
+      if (url === 'https://accounts.bansify.com/api/auth/me') {
         assert.equal(init?.headers?.['X-Gothwad-Authuser'], '2');
         const headers = new Headers({ 'Content-Type': 'application/json' });
         headers.append('Set-Cookie', 'gothwad_session_a=rot1; Path=/; HttpOnly');
@@ -35,12 +35,12 @@ test('Worker /api/auth/session and /api/me?light=1 return verified identity + is
         return new Response(
           JSON.stringify({
             authenticated: true,
-            user: { id: 'u-2', username: 'pawan', email: 'pawan@gothwadtech.com', name: 'Pawan' },
+            user: { id: 'u-2', username: 'pawan', email: 'pawan@bansify.com', name: 'Pawan' },
             activeSlot: 'b',
             authuser: 2,
             accounts: [
-              { id: 'a', authuser: 0, uid: 'u-1', username: 'alice', email: 'alice@gothwadtech.com', name: 'Alice', active: false },
-              { id: 'b', authuser: 2, uid: 'u-2', username: 'pawan', email: 'pawan@gothwadtech.com', name: 'Pawan', active: true },
+              { id: 'a', authuser: 0, uid: 'u-1', username: 'alice', email: 'alice@bansify.com', name: 'Alice', active: false },
+              { id: 'b', authuser: 2, uid: 'u-2', username: 'pawan', email: 'pawan@bansify.com', name: 'Pawan', active: true },
             ],
           }),
           { status: 200, headers },
@@ -51,13 +51,13 @@ test('Worker /api/auth/session and /api/me?light=1 return verified identity + is
 
     const env = {
       DB: brokenDb,
-      AUTH_HUB_URL: 'https://accounts.gothwadtech.com',
+      AUTH_HUB_URL: 'https://accounts.bansify.com',
       ADMIN_USERNAMES: 'pawan,admin',
     };
 
     for (const path of ['/api/auth/session', '/api/me?light=1']) {
       const res = await worker.fetch(
-        new Request(`https://kiwistore.gothwadtech.com${path}`, {
+        new Request(`https://store.bansify.com${path}`, {
           headers: {
             Cookie: 'gothwad_session_b=tok',
             'X-Gothwad-Authuser': '2',
@@ -97,15 +97,15 @@ test('Slow or failed D1 developer lookup on full /api/me does not erase a verifi
   try {
     globalThis.fetch = async (input) => {
       const url = typeof input === 'string' ? input : input.url;
-      if (url === 'https://accounts.gothwadtech.com/api/auth/me') {
+      if (url === 'https://accounts.bansify.com/api/auth/me') {
         return new Response(
           JSON.stringify({
             authenticated: true,
-            user: { id: 'u-1', username: 'alice', email: 'alice@gothwadtech.com', name: 'Alice' },
+            user: { id: 'u-1', username: 'alice', email: 'alice@bansify.com', name: 'Alice' },
             activeSlot: 'a',
             authuser: 0,
             accounts: [
-              { id: 'a', authuser: 0, uid: 'u-1', username: 'alice', email: 'alice@gothwadtech.com', name: 'Alice', active: true },
+              { id: 'a', authuser: 0, uid: 'u-1', username: 'alice', email: 'alice@bansify.com', name: 'Alice', active: true },
             ],
           }),
           { status: 200, headers: { 'Content-Type': 'application/json' } },
@@ -116,11 +116,11 @@ test('Slow or failed D1 developer lookup on full /api/me does not erase a verifi
 
     const env = {
       DB: throwingDb,
-      AUTH_HUB_URL: 'https://accounts.gothwadtech.com',
+      AUTH_HUB_URL: 'https://accounts.bansify.com',
       ADMIN_USERNAMES: 'pawan',
     };
     const res = await worker.fetch(
-      new Request('https://kiwiconsole.gothwadtech.com/api/me', {
+      new Request('https://storeconsole.bansify.com/api/me', {
         headers: { Cookie: 'gothwad_session_a=tok' },
       }),
       env,
@@ -143,7 +143,7 @@ test('Worker resolveSession treats 429, 5xx, network errors, and non-JSON 200 on
   const originalFetch = globalThis.fetch;
 
   try {
-    const env = { DB, AUTH_HUB_URL: 'https://accounts.gothwadtech.com' };
+    const env = { DB, AUTH_HUB_URL: 'https://accounts.bansify.com' };
 
     for (const scenario of [
       { label: 'Cookie 429', headers: { Cookie: 's=1' }, status: 429, body: 'Rate limited', contentType: 'text/plain' },
@@ -158,7 +158,7 @@ test('Worker resolveSession treats 429, 5xx, network errors, and non-JSON 200 on
         });
 
       const res = await worker.fetch(
-        new Request('https://kiwistore.gothwadtech.com/api/me', { headers: scenario.headers }),
+        new Request('https://store.bansify.com/api/me', { headers: scenario.headers }),
         env,
       );
       assert.equal(res.status, 503, `${scenario.label} must return 503`);
@@ -185,7 +185,7 @@ test('Client resolveSessionState deduplicates concurrent requests per authuser s
       return new Response(
         JSON.stringify({
           authenticated: true,
-          user: { id: `u-${authuserHeader}`, username: `user${authuserHeader}`, email: `u${authuserHeader}@gothwadtech.com`, name: `User ${authuserHeader}` },
+          user: { id: `u-${authuserHeader}`, username: `user${authuserHeader}`, email: `u${authuserHeader}@bansify.com`, name: `User ${authuserHeader}` },
           isAdmin: false,
           developer: null,
           developerStatus: 'deferred',
@@ -297,7 +297,7 @@ test('Network/5xx/429/HTML failures resolve as unavailable (not anonymous) and d
           activeId: 'a',
           authuser: 1,
           accounts: [
-            { id: 'a', authuser: 1, uid: 'u-1', username: 'alice', email: 'alice@gothwadtech.com', name: 'Alice', active: true },
+            { id: 'a', authuser: 1, uid: 'u-1', username: 'alice', email: 'alice@bansify.com', name: 'Alice', active: true },
           ],
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } },
@@ -335,16 +335,16 @@ test('authApi.switchAccount throws on failure so failed account switch does not 
 });
 
 test('sanitizeNextUrl blocks open redirects while preserving /u/0..5 paths and first-party ecosystem URLs', () => {
-  assert.equal(authMod.sanitizeNextUrl('https://evil.example.com/phish'), 'https://kiwistore.gothwadtech.com');
-  assert.equal(authMod.sanitizeNextUrl('//evil.example.com/phish'), 'https://kiwistore.gothwadtech.com');
-  assert.equal(authMod.sanitizeNextUrl('javascript:alert(1)'), 'https://kiwistore.gothwadtech.com');
+  assert.equal(authMod.sanitizeNextUrl('https://evil.example.com/phish'), 'https://store.bansify.com');
+  assert.equal(authMod.sanitizeNextUrl('//evil.example.com/phish'), 'https://store.bansify.com');
+  assert.equal(authMod.sanitizeNextUrl('javascript:alert(1)'), 'https://store.bansify.com');
   assert.equal(
     authMod.sanitizeNextUrl('/u/3/library?tab=wish'),
-    'https://kiwistore.gothwadtech.com/u/3/library?tab=wish',
+    'https://store.bansify.com/u/3/library?tab=wish',
   );
   assert.equal(
-    authMod.sanitizeNextUrl('https://kiwiconsole.gothwadtech.com/u/2/apps'),
-    'https://kiwiconsole.gothwadtech.com/u/2/apps',
+    authMod.sanitizeNextUrl('https://storeconsole.bansify.com/u/2/apps'),
+    'https://storeconsole.bansify.com/u/2/apps',
   );
 });
 
@@ -366,7 +366,7 @@ test('Account switch / sign-out generation bump isolates new requests from slow 
               new Response(
                 JSON.stringify({
                   authenticated: true,
-                  user: { id: 'u-a', username: 'alice', email: 'alice@gothwadtech.com', name: 'Alice' },
+                  user: { id: 'u-a', username: 'alice', email: 'alice@bansify.com', name: 'Alice' },
                   isAdmin: true,
                   developer: null,
                   developerStatus: 'deferred',
@@ -384,7 +384,7 @@ test('Account switch / sign-out generation bump isolates new requests from slow 
         new Response(
           JSON.stringify({
             authenticated: true,
-            user: { id: 'u-b', username: 'bob', email: 'bob@gothwadtech.com', name: 'Bob' },
+            user: { id: 'u-b', username: 'bob', email: 'bob@bansify.com', name: 'Bob' },
             isAdmin: false,
             developer: null,
             developerStatus: 'deferred',

@@ -21,7 +21,7 @@ export interface AppRelease {
   appId: string;
   versionCode: number;
   versionName: string;
-  /** APK binary is hosted on GitHub Releases (GothwadTech/storefiles) or F-Droid. */
+  /** APK binary is hosted on GitHub Releases (Bansify/storefiles) or F-Droid. */
   apkProvider: 'github' | 'fdroid';
   apkKey: string;
   apkUrl: string;

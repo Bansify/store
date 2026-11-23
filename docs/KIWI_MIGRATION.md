@@ -4,16 +4,16 @@ This document summarizes the production domain mapping, Cloudflare D1 binding, W
 
 ---
 
-## 1. Production Subdomains (`*.gothwadtech.com`)
+## 1. Production Subdomains (`*.bansify.com`)
 
 | Surface | Production URL | Worker API Route |
 |---|---|---|
-| **Store** | `https://kiwistore.gothwadtech.com` | `kiwistore.gothwadtech.com/api/*` |
-| **Developer Console** | `https://kiwiconsole.gothwadtech.com` | `kiwiconsole.gothwadtech.com/api/*` |
-| **Admin Panel** | `https://kiwiadmin.gothwadtech.com` | `kiwiadmin.gothwadtech.com/api/*` |
-| **Store App Landing** | `https://kiwiapp.gothwadtech.com` | `kiwiapp.gothwadtech.com/api/*` |
+| **Store** | `https://store.bansify.com` | `store.bansify.com/api/*` |
+| **Developer Console** | `https://storeconsole.bansify.com` | `storeconsole.bansify.com/api/*` |
+| **Admin Panel** | `https://storeadmin.bansify.com` | `storeadmin.bansify.com/api/*` |
+| **Store App Landing** | `https://store.bansify.com` | `store.bansify.com/api/*` |
 
-All four subdomains are single-level subdomains covered by Cloudflare Universal SSL (`*.gothwadtech.com`) and share `.gothwadtech.com` HttpOnly SSO cookies.
+All four subdomains are single-level subdomains covered by Cloudflare Universal SSL (`*.bansify.com`) and share `.bansify.com` HttpOnly SSO cookies.
 
 ---
 
@@ -26,10 +26,10 @@ compatibility_date = "2025-02-01"
 keep_vars = true
 
 routes = [
-  { pattern = "kiwistore.gothwadtech.com/api/*", zone_name = "gothwadtech.com" },
-  { pattern = "kiwiconsole.gothwadtech.com/api/*", zone_name = "gothwadtech.com" },
-  { pattern = "kiwiadmin.gothwadtech.com/api/*", zone_name = "gothwadtech.com" },
-  { pattern = "kiwiapp.gothwadtech.com/api/*", zone_name = "gothwadtech.com" }
+  { pattern = "store.bansify.com/api/*", zone_name = "bansify.com" },
+  { pattern = "storeconsole.bansify.com/api/*", zone_name = "bansify.com" },
+  { pattern = "storeadmin.bansify.com/api/*", zone_name = "bansify.com" },
+  { pattern = "store.bansify.com/api/*", zone_name = "bansify.com" }
 ]
 
 [[d1_databases]]
@@ -43,7 +43,7 @@ database_id = "a3dc3e71-cf89-4e0a-89d1-693fcf6f227a"
 ## 3. Environment Variables & Secrets
 
 - `keep_vars = true` is enabled in `worker/wrangler.toml` so Cloudflare Dashboard variables are preserved across deployments.
-- Optional Worker secret for APK uploads to `GothwadTech/storefiles`:
+- Optional Worker secret for APK uploads to `Bansify/storefiles`:
   ```bash
   cd worker
   npx wrangler secret put GITHUB_TOKEN

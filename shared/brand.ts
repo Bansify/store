@@ -32,13 +32,13 @@ export const DEFAULT_SITE_HOSTS: Record<SiteMode, string> = {
 export const BRAND_DEFAULTS = {
   appName: 'Kiwi Store',
   shortName: 'Kiwi',
-  appDomain: 'gothwadtech.com',
+  appDomain: 'bansify.com',
   /** Parent ecosystem name across Mail, Drive, Store, and Accounts. */
   ecosystemName: 'Gothwad',
   /** Native Android client package name. */
   storeappPackage: 'com.gothwad.store',
-  accountsApiUrl: 'https://api.gothwadtech.com',
-  accountsSignInUrl: 'https://accounts.gothwadtech.com',
+  accountsApiUrl: 'https://api.bansify.com',
+  accountsSignInUrl: 'https://accounts.bansify.com',
   oauthClientId: 'kiwi-store',
   apiBase: '/api',
 } as const;

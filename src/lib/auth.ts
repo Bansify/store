@@ -1,4 +1,4 @@
-// First-party Gothwad Accounts SSO (.gothwadtech.com HttpOnly cookies)
+// First-party Gothwad Accounts SSO (.bansify.com HttpOnly cookies)
 // Web rule: NEVER store access_token or refresh_token in localStorage or sessionStorage.
 import {
   API_BASE,

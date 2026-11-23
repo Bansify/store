@@ -14,10 +14,10 @@ async function freshEnv(extra = {}) {
   await DB.exec(bootstrapSql);
   return {
     DB,
-    AUTH_HUB_URL: 'https://api.gothwadtech.com',
+    AUTH_HUB_URL: 'https://api.bansify.com',
     ADMIN_USERNAMES: 'pawangothwad',
     GITHUB_TOKEN: 'gh-test-token',
-    GITHUB_FILES_REPO: 'GothwadTech/storefiles',
+    GITHUB_FILES_REPO: 'Bansify/storefiles',
     ...extra,
   };
 }
@@ -28,7 +28,7 @@ test('D1 Image Storage + Cloudflare Edge Cache CDN: upload, SHA-256 dedupe, magi
     Response.json({
       sub: 'usr-dev',
       preferred_username: 'indiedev',
-      email: 'indie@gothwadtech.com',
+      email: 'indie@bansify.com',
       name: 'Indie Dev',
     }),
   );
@@ -44,7 +44,7 @@ test('D1 Image Storage + Cloudflare Edge Cache CDN: upload, SHA-256 dedupe, magi
   form.append('kind', 'icon');
 
   const up1 = await worker.fetch(
-    new Request('https://kiwiconsole.gothwadtech.com/api/uploads/image', {
+    new Request('https://storeconsole.bansify.com/api/uploads/image', {
       method: 'POST',
       headers: { Authorization: 'Bearer dev-token' },
       body: form,
@@ -61,7 +61,7 @@ test('D1 Image Storage + Cloudflare Edge Cache CDN: upload, SHA-256 dedupe, magi
   form2.append('image', new Blob([webpBytes], { type: 'image/webp' }), 'icon2.webp');
   const up2 = await (
     await worker.fetch(
-      new Request('https://kiwiconsole.gothwadtech.com/api/uploads/image', {
+      new Request('https://storeconsole.bansify.com/api/uploads/image', {
         method: 'POST',
         headers: { Authorization: 'Bearer dev-token' },
         body: form2,
@@ -77,7 +77,7 @@ test('D1 Image Storage + Cloudflare Edge Cache CDN: upload, SHA-256 dedupe, magi
   const badForm = new FormData();
   badForm.append('image', new Blob([new Uint8Array([1, 2, 3, 4, 5])], { type: 'image/webp' }), 'bad.webp');
   const badRes = await worker.fetch(
-    new Request('https://kiwiconsole.gothwadtech.com/api/uploads/image', {
+    new Request('https://storeconsole.bansify.com/api/uploads/image', {
       method: 'POST',
       headers: { Authorization: 'Bearer dev-token' },
       body: badForm,
@@ -92,7 +92,7 @@ test('D1 Image Storage + Cloudflare Edge Cache CDN: upload, SHA-256 dedupe, magi
   const hugeForm = new FormData();
   hugeForm.append('image', new Blob([huge], { type: 'image/webp' }), 'huge.webp');
   const hugeRes = await worker.fetch(
-    new Request('https://kiwiconsole.gothwadtech.com/api/uploads/image', {
+    new Request('https://storeconsole.bansify.com/api/uploads/image', {
       method: 'POST',
       headers: { Authorization: 'Bearer dev-token' },
       body: hugeForm,
@@ -151,7 +151,7 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
       return Response.json({
         sub: 'usr-admin',
         preferred_username: 'pawangothwad',
-        email: 'pawan@gothwadtech.com',
+        email: 'pawan@bansify.com',
         name: 'Pawan Gothwad',
       });
     }
@@ -160,14 +160,14 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
   const headers = { Authorization: 'Bearer admin-tok', 'Content-Type': 'application/json' };
 
   const regRes = await worker.fetch(
-    new Request('https://kiwiconsole.gothwadtech.com/api/dev/register', {
+    new Request('https://storeconsole.bansify.com/api/dev/register', {
       method: 'POST',
       headers,
       body: JSON.stringify({
         displayName: 'Pawan Gothwad',
         orgName: 'Gothwad Studios',
-        supportEmail: 'support@gothwadtech.com',
-        website: 'https://gothwadtech.com',
+        supportEmail: 'support@bansify.com',
+        website: 'https://bansify.com',
       }),
     }),
     env,
@@ -175,7 +175,7 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
   assert.equal(regRes.status, 200);
 
   const createRes = await worker.fetch(
-    new Request('https://kiwiconsole.gothwadtech.com/api/dev/apps', {
+    new Request('https://storeconsole.bansify.com/api/dev/apps', {
       method: 'POST',
       headers,
       body: JSON.stringify({
@@ -191,17 +191,17 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
   const { app: createdApp } = await createRes.json();
 
   const patchRes = await worker.fetch(
-    new Request(`https://kiwiconsole.gothwadtech.com/api/dev/apps/${createdApp.id}`, {
+    new Request(`https://storeconsole.bansify.com/api/dev/apps/${createdApp.id}`, {
       method: 'PATCH',
       headers,
       body: JSON.stringify({
         shortDesc: 'Encrypted notes for Gothwad Account',
         fullDesc: 'Fast markdown notes synced with your Gothwad Account.',
-        iconUrl: 'https://kiwistore.gothwadtech.com/api/images/img-notes-icon',
-        supportEmail: 'support@gothwadtech.com',
+        iconUrl: 'https://store.bansify.com/api/images/img-notes-icon',
+        supportEmail: 'support@bansify.com',
         screenshots: [
-          'https://kiwistore.gothwadtech.com/api/images/img-shot-1',
-          'https://kiwistore.gothwadtech.com/api/images/img-shot-2',
+          'https://store.bansify.com/api/images/img-shot-1',
+          'https://store.bansify.com/api/images/img-shot-2',
         ],
       }),
     }),
@@ -210,7 +210,7 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
   assert.equal(patchRes.status, 200);
 
   const relRes = await worker.fetch(
-    new Request(`https://kiwiconsole.gothwadtech.com/api/dev/apps/${createdApp.id}/releases`, {
+    new Request(`https://storeconsole.bansify.com/api/dev/apps/${createdApp.id}/releases`, {
       method: 'POST',
       headers,
       body: JSON.stringify({
@@ -220,7 +220,7 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
         permissions: ['android.permission.INTERNET'],
         apk: {
           provider: 'github',
-          url: 'https://github.com/GothwadTech/storefiles/releases/download/com.gothwad.notes%401/notes.apk',
+          url: 'https://github.com/Bansify/storefiles/releases/download/com.gothwad.notes%401/notes.apk',
           key: 'com.gothwad.notes@1/notes.apk',
           sizeBytes: 4_194_304,
           sha256: 'abc123',
@@ -234,7 +234,7 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
 
   const subRes = await worker.fetch(
     new Request(
-      `https://kiwiconsole.gothwadtech.com/api/dev/apps/${createdApp.id}/releases/${release.id}/submit`,
+      `https://storeconsole.bansify.com/api/dev/apps/${createdApp.id}/releases/${release.id}/submit`,
       { method: 'POST', headers },
     ),
     env,
@@ -244,7 +244,7 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
   assert.equal(submission.status, 'pending');
 
   const approveRes = await worker.fetch(
-    new Request(`https://kiwiadmin.gothwadtech.com/api/admin/submissions/${submission.id}/approve`, {
+    new Request(`https://storeadmin.bansify.com/api/admin/submissions/${submission.id}/approve`, {
       method: 'POST',
       headers,
       body: JSON.stringify({ note: 'Verified signature and permissions.' }),
@@ -254,7 +254,7 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
   assert.equal(approveRes.status, 200);
 
   const dlRes = await worker.fetch(
-    new Request(`https://kiwistore.gothwadtech.com/api/download/${release.id}`, {
+    new Request(`https://store.bansify.com/api/download/${release.id}`, {
       headers: { 'CF-Connecting-IP': '203.0.113.9' },
     }),
     env,
@@ -263,7 +263,7 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
   assert.match(dlRes.headers.get('Location'), /storefiles\/releases\/download/);
 
   const featRes = await worker.fetch(
-    new Request(`https://kiwiadmin.gothwadtech.com/api/admin/apps/${createdApp.id}/feature`, {
+    new Request(`https://storeadmin.bansify.com/api/admin/apps/${createdApp.id}/feature`, {
       method: 'POST',
       headers,
       body: JSON.stringify({ featured: 'editors' }),
@@ -274,7 +274,7 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
   assert.equal((await featRes.json()).app.featured, 'editors');
 
   const suspRes = await worker.fetch(
-    new Request(`https://kiwiadmin.gothwadtech.com/api/admin/apps/${createdApp.id}/suspend`, {
+    new Request(`https://storeadmin.bansify.com/api/admin/apps/${createdApp.id}/suspend`, {
       method: 'POST',
       headers,
     }),
@@ -283,7 +283,7 @@ test('End-to-End Developer Console -> Release Submit -> Admin Approve / Suspend 
   assert.equal((await suspRes.json()).app.status, 'suspended');
 
   const restRes = await worker.fetch(
-    new Request(`https://kiwiadmin.gothwadtech.com/api/admin/apps/${createdApp.id}/restore`, {
+    new Request(`https://storeadmin.bansify.com/api/admin/apps/${createdApp.id}/restore`, {
       method: 'POST',
       headers,
     }),

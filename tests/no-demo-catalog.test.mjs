@@ -50,7 +50,7 @@ test('download endpoint does not expose a live release for an unpublished app', 
   await DB.prepare(
     `INSERT INTO apps (
       id, developer_id, package_name, name, category, kind, status, short_desc, full_desc, icon_url, support_email
-    ) VALUES ('app-draft', 'dev-gothwad', 'com.gothwad.draft', 'Draft App', 'tools', 'app', 'draft', '', '', '', 'support@gothwadtech.com')`,
+    ) VALUES ('app-draft', 'dev-gothwad', 'com.gothwad.draft', 'Draft App', 'tools', 'app', 'draft', '', '', '', 'support@bansify.com')`,
   ).run();
   await DB.prepare(
     `INSERT INTO app_releases (

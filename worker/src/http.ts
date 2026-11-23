@@ -17,7 +17,7 @@ export function githubOwnerRepo(env: Env): { owner: string; repo: string } {
     if (o && r) return { owner: o.trim(), repo: r.trim() };
   }
   return {
-    owner: (env.GITHUB_FILES_OWNER || 'GothwadTech').trim(),
+    owner: (env.GITHUB_FILES_OWNER || 'Bansify').trim(),
     repo: (env.GITHUB_FILES_REPO || 'storefiles').trim(),
   };
 }

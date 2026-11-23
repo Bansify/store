@@ -14,7 +14,7 @@ async function freshEnv() {
   await DB.exec(bootstrapSql);
   return {
     DB,
-    AUTH_HUB_URL: 'https://api.gothwadtech.com',
+    AUTH_HUB_URL: 'https://api.bansify.com',
     ADMIN_USERNAMES: 'pawangothwad',
   };
 }
@@ -40,7 +40,7 @@ test('F-Droid Catalog endpoint returns curated open-source apps & games, filters
   });
 
   // 1. Default F-Droid catalog
-  const allRes = await worker.fetch(new Request('https://kiwistore.gothwadtech.com/api/store/fdroid'), env);
+  const allRes = await worker.fetch(new Request('https://store.bansify.com/api/store/fdroid'), env);
   assert.equal(allRes.status, 200);
   const allData = await allRes.json();
   assert.equal(allData.source, 'F-Droid');
@@ -49,14 +49,14 @@ test('F-Droid Catalog endpoint returns curated open-source apps & games, filters
   assert.ok(allData.releases.every((r) => r.apkProvider === 'fdroid' && r.isLive === true && r.reviewStatus === 'approved'));
 
   // 2. Games filter
-  const gamesRes = await worker.fetch(new Request('https://kiwistore.gothwadtech.com/api/store/fdroid?kind=game'), env);
+  const gamesRes = await worker.fetch(new Request('https://store.bansify.com/api/store/fdroid?kind=game'), env);
   const gamesData = await gamesRes.json();
   assert.ok(gamesData.apps.length >= 3);
   assert.ok(gamesData.apps.every((a) => a.kind === 'game'));
 
   // 3. Search with live F-Droid search enrichment
   const searchRes = await worker.fetch(
-    new Request('https://kiwistore.gothwadtech.com/api/store/fdroid?q=syncthing'),
+    new Request('https://store.bansify.com/api/store/fdroid?q=syncthing'),
     env,
   );
   const searchData = await searchRes.json();
@@ -67,12 +67,12 @@ test('F-Droid Catalog endpoint returns curated open-source apps & games, filters
 test('/api/store/apps keeps pure D1 by default and merges F-Droid when ?fdroid=1 is passed', async () => {
   const env = await freshEnv();
 
-  const pureRes = await worker.fetch(new Request('https://kiwistore.gothwadtech.com/api/store/apps'), env);
+  const pureRes = await worker.fetch(new Request('https://store.bansify.com/api/store/apps'), env);
   const pureData = await pureRes.json();
   assert.equal(pureData.apps.length, 5);
   assert.ok(pureData.apps.every((a) => !a.id.startsWith('fdroid:')));
 
-  const mergedRes = await worker.fetch(new Request('https://kiwistore.gothwadtech.com/api/store/apps?fdroid=1'), env);
+  const mergedRes = await worker.fetch(new Request('https://store.bansify.com/api/store/apps?fdroid=1'), env);
   const mergedData = await mergedRes.json();
   assert.ok(mergedData.apps.length > 15);
   // First 5 listings are the official D1 apps
@@ -100,7 +100,7 @@ test('F-Droid App Detail, Live Version Enrichment, Download 302 Redirect, Icon F
       return Response.json({
         sub: 'usr-pawan',
         preferred_username: 'pawangothwad',
-        email: 'pawan@gothwadtech.com',
+        email: 'pawan@bansify.com',
         name: 'Pawan Gothwad',
       });
     }
@@ -109,7 +109,7 @@ test('F-Droid App Detail, Live Version Enrichment, Download 302 Redirect, Icon F
 
   // 1. Detail route enriches from F-Droid Package API v1
   const detailRes = await worker.fetch(
-    new Request('https://kiwistore.gothwadtech.com/api/store/apps/fdroid:org.videolan.vlc'),
+    new Request('https://store.bansify.com/api/store/apps/fdroid:org.videolan.vlc'),
     env,
   );
   assert.equal(detailRes.status, 200);
@@ -123,7 +123,7 @@ test('F-Droid App Detail, Live Version Enrichment, Download 302 Redirect, Icon F
 
   // 2. Download route redirects 302 to live F-Droid APK URL
   const dlRes = await worker.fetch(
-    new Request('https://kiwistore.gothwadtech.com/api/download/fdroid:org.videolan.vlc'),
+    new Request('https://store.bansify.com/api/download/fdroid:org.videolan.vlc'),
     env,
   );
   assert.equal(dlRes.status, 302);
@@ -131,7 +131,7 @@ test('F-Droid App Detail, Live Version Enrichment, Download 302 Redirect, Icon F
 
   // 3. Icon route falls back to crisp SVG icon when upstream search has no hit
   const iconRes = await worker.fetch(
-    new Request('https://kiwistore.gothwadtech.com/api/store/fdroid/icon/org.videolan.vlc'),
+    new Request('https://store.bansify.com/api/store/fdroid/icon/org.videolan.vlc'),
     env,
   );
   assert.equal(iconRes.status, 200);
@@ -139,7 +139,7 @@ test('F-Droid App Detail, Live Version Enrichment, Download 302 Redirect, Icon F
 
   // 4. Signed-in user can wishlist an F-Droid app
   const wishRes = await worker.fetch(
-    new Request('https://kiwistore.gothwadtech.com/api/store/apps/fdroid%3Aorg.videolan.vlc/wishlist', {
+    new Request('https://store.bansify.com/api/store/apps/fdroid%3Aorg.videolan.vlc/wishlist', {
       method: 'POST',
       headers: { Authorization: 'Bearer tok-pawan' },
     }),
@@ -148,7 +148,7 @@ test('F-Droid App Detail, Live Version Enrichment, Download 302 Redirect, Icon F
   assert.equal(wishRes.status, 200);
   const wishList = await (
     await worker.fetch(
-      new Request('https://kiwistore.gothwadtech.com/api/store/wishlist', {
+      new Request('https://store.bansify.com/api/store/wishlist', {
         headers: { Authorization: 'Bearer tok-pawan' },
       }),
       env,

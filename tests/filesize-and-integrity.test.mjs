@@ -139,12 +139,12 @@ test('web auth uses direct first-party /signin?next=, silent Accounts SSO fallba
     username: 'Pawan',
     firstName: 'Pawan',
     lastName: 'Gothwad',
-    avatarUrl: 'https://accounts.gothwadtech.com/avatar/pawan.webp',
+    avatarUrl: 'https://accounts.bansify.com/avatar/pawan.webp',
   });
   assert.equal(user.username, 'pawan');
   assert.equal(user.name, 'Pawan Gothwad');
-  assert.equal(user.email, 'pawan@gothwadtech.com');
-  assert.equal(user.avatarUrl, 'https://accounts.gothwadtech.com/avatar/pawan.webp');
+  assert.equal(user.email, 'pawan@bansify.com');
+  assert.equal(user.avatarUrl, 'https://accounts.bansify.com/avatar/pawan.webp');
 
   const slots = normalizeClientAccounts(
     [

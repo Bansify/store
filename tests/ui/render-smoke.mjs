@@ -56,17 +56,17 @@ function stubFetch(url) {
 }
 
 const CASES = [
-  { name: 'store (kiwistore)', url: 'https://kiwistore.gothwadtech.com/', expect: ['Kiwi Store', 'Suggested for you', 'Top charts'], both: ['aria-label="Primary"', 'safe-bottom fixed inset-x-0 bottom-0', 'hidden items-center gap-0.5 lg:flex'], forbidRequests: ['/api/dev/', '/api/admin/'] },
-  { name: 'app detail', url: 'https://kiwistore.gothwadtech.com/app/com.gothwad.store', expect: ['About this app', 'Ratings & reviews', 'Install'], both: ['fixed inset-x-0 bottom-[68px]', 'hidden flex-wrap gap-3 sm:flex'], forbidRequests: ['/api/dev/', '/api/admin/'] },
-  { name: 'library', url: 'https://kiwistore.gothwadtech.com/library', expect: ['My library', 'Wishlist'], forbidRequests: ['/api/dev/', '/api/admin/'] },
-  { name: 'console (kiwiconsole)', url: 'https://kiwiconsole.gothwadtech.com/', expect: ['Dashboard', 'Your apps', 'Total downloads'], both: ['aria-label="Open console menu"', 'sticky top-0 hidden h-dvh w-[268px]', 'divide-y divide-white/[0.06] md:hidden'], forbidRequests: ['/api/admin/'] },
-  { name: 'console releases', url: 'https://kiwiconsole.gothwadtech.com/apps/app-1/releases', expect: ['Upload a new release', 'Release history'], forbidRequests: ['/api/admin/'] },
-  { name: 'console stats', url: 'https://kiwiconsole.gothwadtech.com/stats', expect: ['Statistics', 'Downloads (7 days)'], forbidRequests: ['/api/admin/'] },
-  { name: 'admin (kiwiadmin)', url: 'https://kiwiadmin.gothwadtech.com/', expect: ['Review queue', 'Approve and publish', 'In queue'], both: ['aria-label="Open menu"', 'hidden h-dvh w-[268px] shrink-0 flex-col border-r'] },
-  { name: 'store app landing (kiwiapp)', url: 'https://kiwiapp.gothwadtech.com/', expect: ['in one place.', 'Download the APK', 'Are you a developer?'], both: ['safe-bottom sticky bottom-0', 'lg:grid-cols-2'] },
+  { name: 'store (kiwistore)', url: 'https://store.bansify.com/', expect: ['Kiwi Store', 'Suggested for you', 'Top charts'], both: ['aria-label="Primary"', 'safe-bottom fixed inset-x-0 bottom-0', 'hidden items-center gap-0.5 lg:flex'], forbidRequests: ['/api/dev/', '/api/admin/'] },
+  { name: 'app detail', url: 'https://store.bansify.com/app/com.gothwad.store', expect: ['About this app', 'Ratings & reviews', 'Install'], both: ['fixed inset-x-0 bottom-[68px]', 'hidden flex-wrap gap-3 sm:flex'], forbidRequests: ['/api/dev/', '/api/admin/'] },
+  { name: 'library', url: 'https://store.bansify.com/library', expect: ['My library', 'Wishlist'], forbidRequests: ['/api/dev/', '/api/admin/'] },
+  { name: 'console (kiwiconsole)', url: 'https://storeconsole.bansify.com/', expect: ['Dashboard', 'Your apps', 'Total downloads'], both: ['aria-label="Open console menu"', 'sticky top-0 hidden h-dvh w-[268px]', 'divide-y divide-white/[0.06] md:hidden'], forbidRequests: ['/api/admin/'] },
+  { name: 'console releases', url: 'https://storeconsole.bansify.com/apps/app-1/releases', expect: ['Upload a new release', 'Release history'], forbidRequests: ['/api/admin/'] },
+  { name: 'console stats', url: 'https://storeconsole.bansify.com/stats', expect: ['Statistics', 'Downloads (7 days)'], forbidRequests: ['/api/admin/'] },
+  { name: 'admin (kiwiadmin)', url: 'https://storeadmin.bansify.com/', expect: ['Review queue', 'Approve and publish', 'In queue'], both: ['aria-label="Open menu"', 'hidden h-dvh w-[268px] shrink-0 flex-col border-r'] },
+  { name: 'store app landing (kiwiapp)', url: 'https://store.bansify.com/', expect: ['in one place.', 'Download the APK', 'Are you a developer?'], both: ['safe-bottom sticky bottom-0', 'lg:grid-cols-2'] },
   {
     name: 'store catalog independent of slow auth',
-    url: 'https://kiwistore.gothwadtech.com/',
+    url: 'https://store.bansify.com/',
     customFetch: (url) => {
       const path = String(url).replace(/^https?:\/\/[^/]+/, '');
       if (path.startsWith('/api/me')) return new Promise(() => {}); // never resolves during test window
@@ -77,7 +77,7 @@ const CASES = [
   },
   {
     name: 'console identity ready before dev bundle',
-    url: 'https://kiwiconsole.gothwadtech.com/',
+    url: 'https://storeconsole.bansify.com/',
     customFetch: (url) => {
       const path = String(url).replace(/^https?:\/\/[^/]+/, '');
       if (path.startsWith('/api/dev/apps')) return new Promise(() => {}); // dev bundle still loading
@@ -89,7 +89,7 @@ const CASES = [
   },
   {
     name: 'admin fallback keeps identity & avoids false forbidden',
-    url: 'https://kiwiadmin.gothwadtech.com/',
+    url: 'https://storeadmin.bansify.com/',
     customFetch: (url) => {
       const s = String(url);
       if (s.startsWith('/api/me')) {
@@ -98,10 +98,10 @@ const CASES = [
       if (s.includes('/api/auth/me')) {
         return json({
           authenticated: true,
-          user: { id: 'u1', username: 'alice', email: 'alice@gothwadtech.com', name: 'Alice' },
+          user: { id: 'u1', username: 'alice', email: 'alice@bansify.com', name: 'Alice' },
           activeSlot: 'a',
           authuser: 0,
-          accounts: [{ id: 'a', authuser: 0, uid: 'u1', username: 'alice', email: 'alice@gothwadtech.com', name: 'Alice', active: true }],
+          accounts: [{ id: 'a', authuser: 0, uid: 'u1', username: 'alice', email: 'alice@bansify.com', name: 'Alice', active: true }],
         });
       }
       return stubFetch(url);
@@ -111,7 +111,7 @@ const CASES = [
   },
   {
     name: 'console fallback avoids false onboarding',
-    url: 'https://kiwiconsole.gothwadtech.com/',
+    url: 'https://storeconsole.bansify.com/',
     customFetch: (url) => {
       const s = String(url);
       if (s.startsWith('/api/me')) {
@@ -120,20 +120,20 @@ const CASES = [
       if (s.includes('/api/auth/me')) {
         return json({
           authenticated: true,
-          user: { id: 'u1', username: 'alice', email: 'alice@gothwadtech.com', name: 'Alice' },
+          user: { id: 'u1', username: 'alice', email: 'alice@bansify.com', name: 'Alice' },
           activeSlot: 'a',
           authuser: 0,
-          accounts: [{ id: 'a', authuser: 0, uid: 'u1', username: 'alice', email: 'alice@gothwadtech.com', name: 'Alice', active: true }],
+          accounts: [{ id: 'a', authuser: 0, uid: 'u1', username: 'alice', email: 'alice@bansify.com', name: 'Alice', active: true }],
         });
       }
       return stubFetch(url);
     },
-    expect: ['Account menu (alice@gothwadtech.com)', 'Retry workspace'],
+    expect: ['Account menu (alice@bansify.com)', 'Retry workspace'],
     forbid: ['Create your developer profile', 'Sign in with Gothwad'],
   },
   {
     name: 'console 503 auth_unavailable shows retryable error',
-    url: 'https://kiwiconsole.gothwadtech.com/',
+    url: 'https://storeconsole.bansify.com/',
     customFetch: (url) => {
       const s = String(url);
       if (s.includes('/api/me')) {
