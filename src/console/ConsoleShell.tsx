@@ -4,6 +4,7 @@ import {
   LayoutDashboard, LoaderCircle, Menu, MessageSquareText, PackagePlus, Plus, Settings, Smartphone, Star,
 } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
+import { BansifyShell } from '../ui/BansifyShell';
 import { usePath } from '../lib/router';
 import {
   AccountMenu, AppIcon, Avatar, Card, EmptyState, Logo, PageHeader, Sheet, StatCard,
@@ -79,59 +80,45 @@ export function Shell({ children, navigate, path }: { children: React.ReactNode;
     </div>
   );
 
+  // The console renders inside the shared five-card shell: its own sidebar, mobile header
+  // and drawer are replaced by the shell's panel, which is built from the same groups.
+  const sections = groups.flatMap((g) =>
+    g.items.map(([to, label, Icon]) => ({ id: to, label, icon: Icon as React.ComponentType<{ className?: string; strokeWidth?: number }> })),
+  );
+
   return (
-    <div className="flex min-h-dvh flex-col bg-[#212121] text-neutral-200 lg:flex-row">
-      <aside className="sticky top-0 hidden h-dvh w-[268px] shrink-0 flex-col border-r border-white/[0.07] bg-[#1b1b1b] lg:flex">
-        <div className="flex h-16 items-center border-b border-white/[0.06] px-5"><Logo subtitle="Developer Console" /></div>
-        {developerCard}
-        <ConsoleNav groups={groups} isActive={isActive} navigate={navigate} layout="sidebar" />
-        <div className="border-t border-white/[0.06] p-4">
-          <div className="rounded-xl bg-[#242424] p-3.5">
-            <p className="flex items-center gap-1.5 text-[13px] font-medium text-white"><HelpCircle size={15} className="text-emerald-300" /> Publishing guide</p>
-            <p className="mt-1 text-xs leading-relaxed text-neutral-500">Listing requirements, review policy, and APK upload rules (GitHub storefiles, up to 50 MB).</p>
-          </div>
-        </div>
-      </aside>
-
-      <div className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b border-white/[0.07] bg-[#1b1b1b]/95 px-4 backdrop-blur-xl lg:hidden">
-        <button onClick={() => setDrawer(true)} className="rounded-lg p-2 text-neutral-300 transition hover:bg-white/5 hover:text-white" aria-label="Open console menu">
-          <Menu size={20} />
-        </button>
-        <Logo subtitle="Console" />
-        <div className="ml-auto">{user ? <AccountMenu size={34} /> : <Avatar name="?" size={34} />}</div>
-      </div>
-      <Sheet open={drawer} onClose={() => setDrawer(false)} title="Console menu">
-        {developerCard}
-        <ConsoleNav groups={groups} isActive={isActive} navigate={navigate} onNavigate={() => setDrawer(false)} layout="drawer" />
-        <div className="border-t border-white/[0.06] p-4">
-          <p className="text-xs leading-relaxed text-neutral-500">Listing requirements, review policy, and APK upload rules (GitHub storefiles, up to 50 MB).</p>
-        </div>
-      </Sheet>
-
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="hidden h-16 items-center gap-3 border-b border-white/[0.07] bg-[#212121]/95 px-6 backdrop-blur lg:flex">
-          <p className="flex items-center gap-1.5 text-sm text-neutral-500">
-            Console <ChevronRight size={14} className="text-neutral-700" />
-            <span className="font-medium text-neutral-200">{crumb}</span>
-          </p>
-          <div className="ml-auto flex items-center gap-3">
-            <span className="hidden items-center gap-2.5 xl:flex">
-              <span className="max-w-[190px] leading-tight">
-                <span className="block truncate text-[13px] font-medium text-white">{user?.name}</span>
-                <span className="block truncate text-[11px] text-neutral-500">{user?.email}</span>
-              </span>
-            </span>
-            <span className="h-6 w-px bg-white/10" />
-            <AccountMenu size={36} />
-          </div>
+    <BansifyShell
+      sections={sections}
+      activeSection={sections.find((s) => isActive(s.id))?.id ?? '/'}
+      onSelect={(id) => navigate(id)}
+      onOpenSettings={() => navigate('/settings')}
+      isDark
+      onToggleTheme={() => {
+        document.documentElement.dataset.theme =
+          document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      }}
+      userName={user?.name}
+      userEmail={user?.email}
+      onAccount={() => {
+        window.location.href = 'https://accounts.bansify.com/account';
+      }}
+      searchPlaceholder="Search the console"
+    >
+      <div className="flex h-full min-h-0 flex-col overflow-y-auto">
+        <header className="flex h-12 items-center gap-2 border-b border-white/[0.07] px-4 text-sm text-neutral-500">
+          <span>Console</span>
+          <ChevronRight size={14} className="text-neutral-700" />
+          <span className="font-medium text-neutral-200">{crumb}</span>
         </header>
         <div className="mx-auto w-full max-w-[1180px] flex-1 px-4 py-6 sm:px-6 sm:py-8">
           <BackendNotice />
           {children}
         </div>
-        <footer className="border-t border-white/[0.06] px-4 py-4 text-xs text-neutral-600 sm:px-6">{APP_SHORT_NAME} Developer Console · {SITE_HOSTS.console}</footer>
+        <footer className="border-t border-white/[0.06] px-4 py-4 text-xs text-neutral-600 sm:px-6">
+          {APP_SHORT_NAME} Developer Console · {SITE_HOSTS.console}
+        </footer>
       </div>
-    </div>
+    </BansifyShell>
   );
 }
 
