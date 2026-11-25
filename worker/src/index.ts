@@ -112,7 +112,7 @@ async function route(req: Request, env: Env, ctx?: ExecutionContext): Promise<Re
     return handleApkDownload(req, env, decodeURIComponent(dlMatch[1]));
   }
 
-  // ── Public Store Catalog (Kiwi Store D1 + F-Droid Open Source) ───
+  // ── Public Store Catalog (Bansify Store D1 + F-Droid Open Source) ───
   if (path === '/api/store/categories' && method === 'GET') return handleStoreCategories(env);
   if (path === '/api/store/fdroid' && method === 'GET') {
     return handleFdroidCatalogRoute(req, env, url);

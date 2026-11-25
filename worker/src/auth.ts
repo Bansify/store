@@ -265,7 +265,7 @@ export async function handleMe(req: Request, env: Env): Promise<Response> {
 
   const session = await resolveSession(req, env);
   if (session.upstreamUnavailable) {
-    return err('auth_unavailable', 'Gothwad Accounts service is temporarily unavailable', 503);
+    return err('auth_unavailable', 'Bansify Accounts service is temporarily unavailable', 503);
   }
   const { user, activeSlot, authuser, accounts, accountUrl } = session;
   if (!user) {
@@ -422,11 +422,11 @@ export async function handleAuthSignOut(
   if (!targetSlot) {
     const domain = brandFor(env).appDomain;
     const clearCookies = [
-      'gothwad_at',
-      'gothwad_rt',
-      'gothwad_sid',
-      'gothwad_active',
-      'gothwad_accounts',
+      'bansify_at',
+      'bansify_rt',
+      'bansify_sid',
+      'bansify_active',
+      'bansify_accounts',
     ].map(
       (name) =>
         `${name}=; Domain=.${domain}; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=Lax`,
@@ -440,7 +440,7 @@ export async function handleAuthSignOut(
 export async function handleAuthAccounts(req: Request, env: Env): Promise<Response> {
   const session = await resolveSession(req, env);
   if (session.upstreamUnavailable) {
-    return err('auth_unavailable', 'Gothwad Accounts service is temporarily unavailable', 503);
+    return err('auth_unavailable', 'Bansify Accounts service is temporarily unavailable', 503);
   }
   return json({
     authenticated: Boolean(session.user),

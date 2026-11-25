@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import type {
-  AccountSlotItem, AppRelease, Category, Developer, GothwadUser, ReportItem, StoreApp,
+  AccountSlotItem, AppRelease, Category, Developer, BansifyUser, ReportItem, StoreApp,
 } from '../types';
 import { CATEGORIES, SEED_APPS, SEED_REPORTS, SEED_REVIEWS, SEED_SUBMISSIONS } from '../data/seed';
 import {
@@ -22,11 +22,11 @@ export type AuthStatus = 'loading' | 'authenticated' | 'anonymous' | 'unavailabl
 export type SectionStatus = 'idle' | 'loading' | 'ready' | 'unavailable';
 
 const LS_KEY = 'kiwi-store-state-v1';
-let memoryDemoUser: GothwadUser | null = null;
+let memoryDemoUser: BansifyUser | null = null;
 
 interface Ctx extends AppState {
   categories: Category[];
-  user: GothwadUser | null;
+  user: BansifyUser | null;
   accounts: AccountSlotItem[];
   activeSlot: string | null;
   authuser: number;
@@ -47,7 +47,7 @@ interface Ctx extends AppState {
   isDemoUser: boolean;
   isPreviewMode: boolean;
   signInDemo: () => void;
-  setUser: (u: GothwadUser | null) => void;
+  setUser: (u: BansifyUser | null) => void;
   signOut: () => void;
   signOutSlot: (slotId: string) => Promise<void>;
   switchAccount: (target: { id?: string; authuser?: number }) => Promise<void>;
@@ -89,7 +89,7 @@ function loadState(demoModeAvailable: boolean): AppState {
   };
 }
 
-function loadDemoUser(demoModeAvailable: boolean): GothwadUser | null {
+function loadDemoUser(demoModeAvailable: boolean): BansifyUser | null {
   if (!demoModeAvailable) return null;
   return memoryDemoUser;
 }
@@ -108,7 +108,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [libraryError, setLibraryError] = useState<string | null>(null);
   const [adminStatus, setAdminStatus] = useState<SectionStatus>('idle');
   const [adminError, setAdminError] = useState<string | null>(null);
-  const [user, setUserState] = useState<GothwadUser | null>(() => loadDemoUser(demoModeAvailable));
+  const [user, setUserState] = useState<BansifyUser | null>(() => loadDemoUser(demoModeAvailable));
   const [accounts, setAccounts] = useState<AccountSlotItem[]>([]);
   const [activeSlot, setActiveSlot] = useState<string | null>(null);
   const [authuser, setAuthuser] = useState<number>(() => getActiveAuthuser() ?? 0);
@@ -317,7 +317,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setPermissionsStatus('unavailable');
       setDeveloperStatus('unavailable');
       setAuthStatus('unavailable');
-      setAuthError(session.errorMessage || 'Could not verify your Gothwad Account right now. Please try again.');
+      setAuthError(session.errorMessage || 'Could not verify your Bansify Account right now. Please try again.');
     } else {
       setServerAdmin(false);
       setPermissionsStatus('ready');
@@ -339,7 +339,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     void hydrateCatalog(gen);
   }, [hydrateCatalog, hydrateIdentity]);
 
-  const setUser = useCallback((next: GothwadUser | null) => {
+  const setUser = useCallback((next: BansifyUser | null) => {
     if (!demoModeAvailable && next?.id === DEMO_USER.id) return;
     authGenRef.current = bumpAuthGeneration();
     clearInflightSessions();

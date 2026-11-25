@@ -3,7 +3,7 @@ import { Star } from 'lucide-react';
 import type { StoreApp } from '../types';
 import { formatCount } from '../lib/storage';
 import { CATEGORY_LABELS } from '../data/categories';
-import { handleOAuthCallback, startGothwadSignIn } from '../lib/auth';
+import { handleOAuthCallback, startBansifySignIn } from '../lib/auth';
 import { ACCOUNTS_HOST, APP_SHORT_NAME } from '../lib/config';
 import { useApp } from '../lib/AppContext';
 export { AccountMenu } from './AccountMenu';
@@ -318,7 +318,7 @@ export function useToast(timeout = 4500) {
 // ── OAuth Callback view ───────────────────────────────────────────────
 export function AuthCallbackView({ onDone }: { onDone: () => void }) {
   const { setUser } = useApp();
-  const [msg, setMsg] = useState('Returning from Gothwad Accounts…');
+  const [msg, setMsg] = useState('Returning from Bansify Accounts…');
   useEffect(() => {
     void handleOAuthCallback().then((r) => {
       if ('user' in r) {
@@ -477,7 +477,7 @@ export function SignInPrompt({ what }: { what: string }) {
           One Bansify Account for Mail, Drive, Store, and more. Sign in to continue to {what}.
         </p>
         <button
-          onClick={() => { void startGothwadSignIn(); }}
+          onClick={() => { void startBansifySignIn(); }}
           className="mt-6 w-full rounded-lg bg-emerald-500 px-5 py-3 text-sm font-semibold text-[#08130e] shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400"
         >
           Sign in

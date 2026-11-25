@@ -6,7 +6,7 @@ import type { Env, Row } from '../types';
 
 export async function handleGetLibrary(req: Request, env: Env): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 
@@ -20,7 +20,7 @@ export async function handleGetLibrary(req: Request, env: Env): Promise<Response
 
 export async function handleGetWishlist(req: Request, env: Env): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 
@@ -39,7 +39,7 @@ export async function handleStoreAppAction(
   action: 'reviews' | 'wishlist' | 'report' | 'library',
 ): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 

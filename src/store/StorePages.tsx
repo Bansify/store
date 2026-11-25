@@ -221,7 +221,7 @@ export function ListPage({
           <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] p-1">
             {([
               ['all', 'All sources'],
-              ['kiwi', 'Kiwi Store'],
+              ['kiwi', 'Bansify Store'],
               ['fdroid', 'F-Droid FOSS'],
             ] as const).map(([id, label]) => (
               <button
@@ -306,7 +306,7 @@ export function SearchPage({ navigate, query }: { navigate: (p: string) => void;
   return (
     <ListPage
       navigate={navigate}
-      title={q ? `Results for "${query}"` : 'Search Kiwi Store & F-Droid'}
+      title={q ? `Results for "${query}"` : 'Search Bansify Store & F-Droid'}
       sub={`${merged.length} ${merged.length === 1 ? 'app' : 'apps'} found${searchingFdroid ? ' · Searching F-Droid repository…' : ''}`}
       apps={merged}
     />
@@ -330,7 +330,7 @@ export function LibraryPage({ navigate }: { navigate: (p: string) => void }) {
   if (!authReady || authStatus === 'loading') {
     return (
       <main className="mx-auto max-w-5xl px-4 py-16 text-center text-sm text-neutral-400">
-        Checking your Gothwad Account…
+        Checking your Bansify Account…
       </main>
     );
   }
@@ -338,7 +338,7 @@ export function LibraryPage({ navigate }: { navigate: (p: string) => void }) {
     return (
       <main className="mx-auto max-w-md px-4 py-16 text-center">
         <div className="rounded-3xl border border-amber-500/30 bg-amber-500/10 p-6">
-          <h1 className="font-display text-lg font-bold text-white">Could not verify your Gothwad Account</h1>
+          <h1 className="font-display text-lg font-bold text-white">Could not verify your Bansify Account</h1>
           <p className="mt-2 text-sm text-neutral-300">
             {authError || 'The authentication service is temporarily unreachable. Please try again.'}
           </p>
@@ -438,7 +438,7 @@ export function LibraryPage({ navigate }: { navigate: (p: string) => void }) {
 
 export function CallbackPage({ navigate }: { navigate: (p: string) => void }) {
   const { setUser } = useApp();
-  const [msg, setMsg] = useState('Returning from Gothwad Accounts...');
+  const [msg, setMsg] = useState('Returning from Bansify Accounts...');
   useEffect(() => {
     handleOAuthCallback().then((r) => {
       if ('user' in r) {

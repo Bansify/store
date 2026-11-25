@@ -1,7 +1,7 @@
 import type {
   AppRelease,
   Developer,
-  GothwadUser,
+  BansifyUser,
   ReportItem,
   Review,
   StoreApp,
@@ -85,7 +85,7 @@ export function mergeById<T extends { id: string }>(base: T[], incoming: T[]): T
 export function applyLocalDemoReview(
   current: AppState,
   appId: string,
-  user: GothwadUser,
+  user: BansifyUser,
   rating: number,
   body: string,
 ): AppState {
@@ -111,7 +111,7 @@ export function applyLocalDemoReview(
 
 export function buildLocalDemoApp(
   current: AppState,
-  user: GothwadUser | null,
+  user: BansifyUser | null,
   data: Pick<StoreApp, 'name' | 'packageName' | 'category' | 'kind'>,
 ): StoreApp {
   return {
@@ -214,7 +214,7 @@ export function applyLocalDemoDecide(
 
 export interface ActionDeps {
   getState: () => AppState;
-  getUser: () => GothwadUser | null;
+  getUser: () => BansifyUser | null;
   apiMode: () => boolean;
   isLocalDemo: () => boolean;
   assertCanWrite: () => void;

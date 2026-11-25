@@ -331,7 +331,7 @@ function SettingsPage() {
             </div>
           </form>
         </Card>
-        <Card title="Gothwad Account" desc="Identity is managed by Gothwad Accounts, not here.">
+        <Card title="Bansify Account" desc="Identity is managed by Bansify Accounts, not here.">
           <dl className="grid gap-4 text-sm sm:grid-cols-2">
             <div>
               <dt className="text-neutral-500">Username</dt>
@@ -351,7 +351,7 @@ function SettingsPage() {
 
 function Callback() {
   const { setUser } = useApp();
-  const [msg, setMsg] = useState('Returning from Gothwad Accounts…');
+  const [msg, setMsg] = useState('Returning from Bansify Accounts…');
   useEffect(() => {
     void import('../lib/auth').then((m) =>
       m.handleOAuthCallback().then((r) => {
@@ -381,7 +381,7 @@ export default function ConsoleApp() {
   if (!authReady || authStatus === 'loading') {
     return (
       <div className="grid min-h-dvh place-items-center bg-[#212121] text-neutral-400">
-        Checking your Gothwad Account…
+        Checking your Bansify Account…
       </div>
     );
   }
@@ -389,7 +389,7 @@ export default function ConsoleApp() {
     return (
       <div className="grid min-h-dvh place-items-center bg-[#212121] px-4 text-neutral-200">
         <div className="w-full max-w-md rounded-3xl border border-amber-500/30 bg-[#262626] p-7 text-center">
-          <h1 className="font-display text-lg font-bold text-white">Could not verify your Gothwad Account</h1>
+          <h1 className="font-display text-lg font-bold text-white">Could not verify your Bansify Account</h1>
           <p className="mt-2 text-sm text-neutral-300">
             {authError || 'The authentication service is temporarily unreachable. Please try again.'}
           </p>

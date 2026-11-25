@@ -29,7 +29,7 @@ async function ownsApp(
 
 export async function handleDevRegister(req: Request, env: Env): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 
@@ -68,7 +68,7 @@ export async function handleDevRegister(req: Request, env: Env): Promise<Respons
 
 export async function handleDevGetApps(req: Request, env: Env): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 
@@ -106,7 +106,7 @@ export async function handleDevGetApps(req: Request, env: Env): Promise<Response
 
 export async function handleDevCreateApp(req: Request, env: Env): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 
@@ -146,7 +146,7 @@ export async function handleDevCreateApp(req: Request, env: Env): Promise<Respon
 
 export async function handleDevAppDetail(req: Request, env: Env, appIdOrPkg: string): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 
@@ -252,7 +252,7 @@ export async function handleDevStatusAction(
   action: 'delist' | 'relist',
 ): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 
@@ -283,7 +283,7 @@ export async function handleDevSubroute(
   url: URL = new URL(req.url),
 ): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 
@@ -389,7 +389,7 @@ export async function handleDevSubmitRelease(
   releaseId: string,
 ): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 
@@ -443,7 +443,7 @@ export async function handleDevReplyReview(
   reviewId: string,
 ): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 
@@ -467,7 +467,7 @@ export async function handleDevReplyReview(
 
 export async function handleDevAllReviews(req: Request, env: Env): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet', 503);
   await ensureSchema(env.DB, env);
 

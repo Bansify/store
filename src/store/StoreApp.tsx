@@ -12,7 +12,7 @@ import {
 } from '../shared/ui';
 import { BackendNotice } from '../shared/BackendNotice';
 import { formatBytes, formatCount } from '../lib/storage';
-import { startGothwadSignIn } from '../lib/auth';
+import { startBansifySignIn } from '../lib/auth';
 import { APP_NAME, ECOSYSTEM_NAME, SITE_URLS } from '../lib/config';
 import type { AppRelease, Review, StoreApp as StoreAppType } from '../types';
 import { CallbackPage, HomePage, LibraryPage, ListPage, Rail, SearchPage } from './StorePages';
@@ -47,7 +47,7 @@ function Header({ navigate, path }: { navigate: (p: string) => void; path: strin
 
         <form onSubmit={submit} className="ml-auto hidden w-full max-w-md items-center gap-2 rounded-full bg-white/[0.06] px-4 py-2.5 ring-1 ring-white/[0.07] transition focus-within:bg-white/[0.08] focus-within:ring-emerald-400/50 md:flex lg:ml-6">
           <Search size={17} className="shrink-0 text-neutral-400" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search Kiwi Store & F-Droid" aria-label="Search apps and games"
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search Bansify Store & F-Droid" aria-label="Search apps and games"
             className="w-full bg-transparent text-sm text-white outline-none placeholder:text-neutral-500" />
           {q && <button type="button" onClick={() => setQ('')} aria-label="Clear search"><X size={15} className="text-neutral-400 hover:text-white" /></button>}
         </form>
@@ -69,7 +69,7 @@ function Header({ navigate, path }: { navigate: (p: string) => void; path: strin
             <AccountMenu />
           ) : (
             <>
-              <Button variant="primary" size="sm" pill onClick={() => { void startGothwadSignIn(); }}>Sign in</Button>
+              <Button variant="primary" size="sm" pill onClick={() => { void startBansifySignIn(); }}>Sign in</Button>
               {demoModeAvailable && <button onClick={signInDemo} className="hidden rounded-full border border-white/15 px-3 py-2 text-xs font-semibold text-neutral-200 transition hover:bg-white/5 sm:block">Demo</button>}
             </>
           )}
@@ -79,7 +79,7 @@ function Header({ navigate, path }: { navigate: (p: string) => void; path: strin
       <form onSubmit={submit} className="px-4 pb-3 md:hidden">
         <label className="flex items-center gap-2 rounded-full bg-white/[0.06] px-4 py-2.5 ring-1 ring-white/[0.07] focus-within:ring-emerald-400/50">
           <Search size={16} className="shrink-0 text-neutral-400" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search Kiwi Store & F-Droid" aria-label="Search apps and games"
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search Bansify Store & F-Droid" aria-label="Search apps and games"
             className="w-full bg-transparent text-sm text-white outline-none placeholder:text-neutral-500" />
         </label>
       </form>
@@ -150,7 +150,7 @@ function DetailPage({
       if (demoModeAvailable) {
         signInDemo();
         void toggleWishlist(app.id).catch((error: Error) => setToast(error.message));
-      } else void startGothwadSignIn();
+      } else void startBansifySignIn();
       return;
     }
     void toggleWishlist(app.id).catch((error: Error) => setToast(error.message));
@@ -299,7 +299,7 @@ function DetailPage({
                 </div>
               </form>
             ) : !user && !fdroid ? (
-              <button onClick={() => { if (demoModeAvailable) signInDemo(); else void startGothwadSignIn(); }}
+              <button onClick={() => { if (demoModeAvailable) signInDemo(); else void startBansifySignIn(); }}
                 className="mb-6 w-full rounded-2xl border border-dashed border-white/15 px-4 py-4 text-sm text-neutral-300 transition hover:border-emerald-400/40 hover:bg-white/[0.03]">
                 {demoModeAvailable ? 'Try demo mode to write a review' : 'Sign in to write a review'}
               </button>

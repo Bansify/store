@@ -34,7 +34,7 @@ async function requireAdmin(
   env: Env,
 ): Promise<{ user: AuthUser } | { error: Response }> {
   const user = await verifyUser(req, env);
-  if (!user) return { error: err('unauthorized', 'Please sign in with Gothwad', 401) };
+  if (!user) return { error: err('unauthorized', 'Please sign in with Bansify', 401) };
   if (!hasD1(env)) {
     return { error: err('d1_not_configured', 'The Store database is not configured yet', 503) };
   }
