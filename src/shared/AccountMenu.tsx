@@ -12,7 +12,7 @@ import {
   ensureGothwadAccountMenu,
   type WidgetAccountItem,
   type WidgetExtraAction,
-} from './gothwadAccountMenuFallback';
+} from './bansifyAccountMenuFallback';
 import { Avatar } from './ui';
 
 export function AccountMenu({
@@ -47,7 +47,7 @@ export function AccountMenu({
         <button
           type="button"
           onClick={() => void retryAuth()}
-          title="Could not verify your Gothwad Account. Click to retry."
+          title="Could not verify your Bansify Account. Click to retry."
           className="inline-flex items-center justify-center rounded-full border border-amber-300 bg-amber-50 px-3.5 py-1.5 text-xs font-semibold text-amber-800 transition hover:bg-amber-100 dark:border-amber-500/40 dark:bg-amber-950/50 dark:text-amber-200"
         >
           Retry account
@@ -170,7 +170,7 @@ export function AccountMenu({
         nextUrl: window.location.href,
         manageAccountHref: manageAccountUrl(authuser),
         extraActions,
-        onSwitchAccount: async (acc) => {
+        onSwitchAccount: async (acc: { id: string; authuser: number }) => {
           await switchAccount({ id: acc.id, authuser: acc.authuser });
         },
         onSignOutAccount: async (slotOrAccount: string | { id?: string; slot?: string }, targetAccount?: { id?: string; slot?: string } | null) => {

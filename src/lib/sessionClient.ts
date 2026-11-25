@@ -11,7 +11,7 @@ import {
   normalizeClientUser,
   resolveDirectAccountsSession,
 } from './auth';
-import type { AccountSlotItem, Developer, GothwadUser } from '../types';
+import type { AccountSlotItem, Developer, BansifyUser } from '../types';
 
 export { fetchDirectAccountsSession, resolveDirectAccountsSession };
 
@@ -21,7 +21,7 @@ export type DeveloperResolutionStatus = 'ready' | 'none' | 'loading' | 'unavaila
 
 export interface SessionResolutionResult {
   status: SessionResolutionStatus;
-  user: GothwadUser | null;
+  user: BansifyUser | null;
   developer: Developer | null;
   developerStatus: DeveloperResolutionStatus;
   isAdmin: boolean | null;
@@ -37,7 +37,7 @@ export interface SessionResolutionResult {
 }
 
 export interface SessionInfo {
-  user: GothwadUser;
+  user: BansifyUser;
   developer: Developer | null;
   developerStatus?: DeveloperResolutionStatus;
   isAdmin: boolean;
@@ -111,7 +111,7 @@ async function performSessionResolution(opts?: {
         workerData.authenticated !== false && workerData.user && typeof workerData.user === 'object'
           ? (workerData.user as Record<string, unknown>)
           : null;
-      const user = rawUser ? (normalizeClientUser(rawUser) ?? (rawUser as unknown as GothwadUser)) : null;
+      const user = rawUser ? (normalizeClientUser(rawUser) ?? (rawUser as unknown as BansifyUser)) : null;
 
       if (!user) {
         return {
@@ -219,12 +219,12 @@ async function performSessionResolution(opts?: {
         errorMessage:
           typeof workerData.message === 'string'
             ? workerData.message
-            : 'Gothwad Accounts service is temporarily unavailable.',
+            : 'Bansify Accounts service is temporarily unavailable.',
       };
     }
   }
 
-  // Fallback to direct Gothwad Accounts SSO only when Store Worker was unreachable or returned HTML/5xx
+  // Fallback to direct Bansify Accounts SSO only when Store Worker was unreachable or returned HTML/5xx
   const direct = await resolveDirectAccountsSession({
     signal: opts?.signal,
     authuser: effectiveAuthuser,
@@ -244,7 +244,7 @@ async function performSessionResolution(opts?: {
       accountUrl: manageAccountUrl(direct.authuser),
       source: 'accounts-fallback',
       errorCode: 'store_permissions_unavailable',
-      errorMessage: 'Signed in via Gothwad Accounts, but the Store service is currently unavailable.',
+      errorMessage: 'Signed in via Bansify Accounts, but the Store service is currently unavailable.',
     };
   }
   if (direct.status === 'anonymous') {

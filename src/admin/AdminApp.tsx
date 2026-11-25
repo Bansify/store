@@ -33,7 +33,7 @@ function Gate({ children }: { children: React.ReactNode }) {
   if (!authReady || authStatus === 'loading') {
     return (
       <div className="grid min-h-dvh place-items-center bg-[#212121] text-neutral-400">
-        Checking your Gothwad Account…
+        Checking your Bansify Account…
       </div>
     );
   }
@@ -41,7 +41,7 @@ function Gate({ children }: { children: React.ReactNode }) {
     return (
       <div className="grid min-h-dvh place-items-center bg-[#212121] px-4 text-center text-neutral-200">
         <div className="max-w-md rounded-3xl border border-amber-500/30 bg-[#262626] p-7">
-          <h1 className="font-display text-xl font-bold text-white">Could not verify your Gothwad Account</h1>
+          <h1 className="font-display text-xl font-bold text-white">Could not verify your Bansify Account</h1>
           <p className="mt-2 text-sm text-neutral-300">
             {authError || 'The authentication service is temporarily unreachable. Please try again.'}
           </p>

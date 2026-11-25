@@ -1,4 +1,4 @@
-// Universal Google-style Gothwad Account Menu loader + offline Shadow DOM fallback
+// Universal Google-style Bansify Account Menu loader + offline Shadow DOM fallback
 // Loads https://accounts.<domain>/widget/account-menu.js in production and guarantees
 // window.GothwadAccountMenu is always available even in offline dev / CI environments.
 import {
@@ -106,7 +106,7 @@ function createLocalFallbackMenu(): GothwadAccountMenuGlobal {
     if (typeof document === 'undefined' || !state.user) return;
     if (!hostEl) {
       hostEl = document.createElement('div');
-      hostEl.id = 'gothwad-account-menu-host';
+      hostEl.id = 'bansify-account-menu-host';
       shadow = hostEl.attachShadow({ mode: 'open' });
       document.body.appendChild(hostEl);
     }
@@ -301,7 +301,7 @@ export function ensureGothwadAccountMenu(): Promise<GothwadAccountMenuGlobal> {
 
   scriptPromise = new Promise<GothwadAccountMenuGlobal>((resolve) => {
     const src = widgetScriptUrl();
-    const existing = document.querySelector(`script[data-gothwad-account-menu="${src}"]`);
+    const existing = document.querySelector(`script[data-bansify-account-menu="${src}"]`);
     if (existing) {
       resolve(window.GothwadAccountMenu!);
       return;
@@ -310,7 +310,7 @@ export function ensureGothwadAccountMenu(): Promise<GothwadAccountMenuGlobal> {
     script.type = 'module';
     script.src = src;
     script.async = true;
-    script.dataset.gothwadAccountMenu = src;
+    script.dataset.bansifyAccountMenu = src;
     script.onload = () => resolve(window.GothwadAccountMenu!);
     script.onerror = () => resolve(window.GothwadAccountMenu!);
     document.head.appendChild(script);

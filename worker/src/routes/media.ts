@@ -47,7 +47,7 @@ function toUint8Array(data: unknown): Uint8Array {
 
 export async function handleImageUpload(req: Request, env: Env): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet; uploads are unavailable.', 503);
   await ensureSchema(env.DB, env);
 
@@ -179,7 +179,7 @@ export async function handleGetImage(req: Request, env: Env, imageId: string, ct
 
 export async function handleApkInspect(req: Request, env: Env): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
 
   const form = await req.formData().catch(() => null);
   const file = form?.get('file');
@@ -267,7 +267,7 @@ async function githubUploadApk(
 
 export async function handleApkUpload(req: Request, env: Env): Promise<Response> {
   const user = await verifyUser(req, env);
-  if (!user) return err('unauthorized', 'Please sign in with Gothwad', 401);
+  if (!user) return err('unauthorized', 'Please sign in with Bansify', 401);
   if (!hasD1(env)) return err('d1_not_configured', 'The Store database is not configured yet; uploads are unavailable.', 503);
   await ensureSchema(env.DB, env);
   if (!githubToken(env)) return err('github_not_configured', 'APK hosting is not configured yet. Please try again later.', 503);

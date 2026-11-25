@@ -145,7 +145,7 @@ export function Onboarding() {
   return (
     <main className="mx-auto max-w-3xl">
       <div className="mb-8 flex items-center gap-0">
-        {['Gothwad Account', 'Developer profile', 'Create your first app'].map((s, i) => (
+        {['Bansify Account', 'Developer profile', 'Create your first app'].map((s, i) => (
           <div key={s} className="flex flex-1 items-center last:flex-none">
             <span className="flex items-center gap-2.5">
               <span className={`grid h-8 w-8 place-items-center rounded-full text-[13px] font-semibold ${i < 2 ? 'bg-emerald-600 text-white' : 'border border-white/15 text-neutral-400'}`}>{i < 1 ? '✓' : i + 1}</span>

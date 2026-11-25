@@ -1,4 +1,4 @@
-// First-party Gothwad Accounts SSO (.bansify.com HttpOnly cookies)
+// First-party Bansify Accounts SSO (.bansify.com HttpOnly cookies)
 // Web rule: NEVER store access_token or refresh_token in localStorage or sessionStorage.
 import {
   API_BASE,
@@ -10,7 +10,7 @@ import {
   isProductionHostCheck,
 } from './config';
 import { getAuthuserFromLocation, resolveSignOutSlotId } from './authuser';
-import type { AccountSlotItem, GothwadUser } from '../types';
+import type { AccountSlotItem, BansifyUser } from '../types';
 
 export { resolveSignOutSlotId };
 
@@ -93,7 +93,7 @@ export function buildSignInUrl(opts?: {
   return u.toString();
 }
 
-export async function startGothwadSignIn(opts?: {
+export async function startBansifySignIn(opts?: {
   nextUrl?: string;
   choose?: boolean;
   add?: boolean;
@@ -140,7 +140,7 @@ export function authHeaders(explicitAuthuser?: number | null): Record<string, st
   return headers;
 }
 
-export function normalizeClientUser(raw: Record<string, unknown> | null | undefined): GothwadUser | null {
+export function normalizeClientUser(raw: Record<string, unknown> | null | undefined): BansifyUser | null {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
   const username = String(raw.username ?? raw.preferred_username ?? '').trim().toLowerCase();
   const id = String(raw.id ?? raw.sub ?? username).trim();
@@ -205,7 +205,7 @@ export function normalizeClientAccounts(
 export type DirectAccountsSessionResult =
   | {
       status: 'authenticated';
-      user: GothwadUser;
+      user: BansifyUser;
       activeSlot: string | null;
       authuser: number;
       accounts: AccountSlotItem[];
@@ -228,7 +228,7 @@ export type DirectAccountsSessionResult =
     };
 
 /**
- * Direct browser silent SSO check against Gothwad Accounts API (`/api/auth/me`)
+ * Direct browser silent SSO check against Bansify Accounts API (`/api/auth/me`)
  * preserving distinct `authenticated`, `anonymous`, and `unavailable` states.
  */
 export async function resolveDirectAccountsSession(opts?: {
@@ -272,7 +272,7 @@ export async function resolveDirectAccountsSession(opts?: {
         authuser: effectiveAuthuser ?? 0,
         accounts: [],
         code: `accounts_http_${res.status}`,
-        message: 'Gothwad Accounts is temporarily unavailable. Please try again.',
+        message: 'Bansify Accounts is temporarily unavailable. Please try again.',
       };
     }
     const text = await res.text();
@@ -293,7 +293,7 @@ export async function resolveDirectAccountsSession(opts?: {
         authuser: effectiveAuthuser ?? 0,
         accounts: [],
         code: 'invalid_response',
-        message: 'Received an unexpected response from Gothwad Accounts.',
+        message: 'Received an unexpected response from Bansify Accounts.',
       };
     }
     const activeSlot =
@@ -338,7 +338,7 @@ export async function resolveDirectAccountsSession(opts?: {
       authuser: effectiveAuthuser ?? 0,
       accounts: [],
       code: 'network',
-      message: 'Could not reach Gothwad Accounts. Check your connection and try again.',
+      message: 'Could not reach Bansify Accounts. Check your connection and try again.',
     };
   }
 }
@@ -347,7 +347,7 @@ export async function fetchDirectAccountsSession(opts?: {
   signal?: AbortSignal;
   authuser?: number | null;
 }): Promise<{
-  user: GothwadUser;
+  user: BansifyUser;
   activeSlot: string | null;
   authuser: number;
   accounts: AccountSlotItem[];
@@ -363,7 +363,7 @@ export async function fetchDirectAccountsSession(opts?: {
 }
 
 /** Compatibility handler if an external or legacy flow redirects to `/auth/callback`. */
-export async function handleOAuthCallback(): Promise<{ user: GothwadUser } | { error: string }> {
+export async function handleOAuthCallback(): Promise<{ user: BansifyUser } | { error: string }> {
   const direct = await resolveDirectAccountsSession();
   if (direct.status === 'authenticated') return { user: direct.user };
   const p = new URLSearchParams(window.location.search);
@@ -394,7 +394,7 @@ export async function handleOAuthCallback(): Promise<{ user: GothwadUser } | { e
   }
 }
 
-export async function fetchMe(): Promise<GothwadUser | null> {
+export async function fetchMe(): Promise<BansifyUser | null> {
   try {
     const res = await fetch(`${API_BASE}/me?light=1`, {
       credentials: 'include',
@@ -459,10 +459,10 @@ export async function signOut(slotId?: string): Promise<void> {
 }
 
 // Local preview identity; AppContext exposes it only after isDemoModeAllowed()
-// confirms that the current hostname is not a Gothwad production domain.
-export const DEMO_USER: GothwadUser = {
+// confirms that the current hostname is not a Bansify production domain.
+export const DEMO_USER: BansifyUser = {
   id: 'demo-user-1',
   username: 'pawan',
-  name: 'Gothwad',
+  name: 'Bansify',
   email: `pawan@${BRAND.appDomain}`,
 };

@@ -249,7 +249,7 @@ interface CatalogResponse {
   source?: string;
 }
 
-/** Load live catalog records (Kiwi Store D1 + F-Droid Open Source); never substitute local sample listings. */
+/** Load live catalog records (Bansify Store D1 + F-Droid Open Source); never substitute local sample listings. */
 export async function fetchCatalog(signal?: AbortSignal): Promise<Catalog> {
   try {
     const [appsRes, catRes] = await Promise.all([

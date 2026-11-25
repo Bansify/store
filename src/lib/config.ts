@@ -1,4 +1,4 @@
-// ── Kiwi Store config ────────────────────────────────────────────────
+// ── Bansify Store config ────────────────────────────────────────────────
 // Never hardcode app names or domains in components.
 // Single source of truth = shared/brand.ts, overridden via environment variables:
 //   Frontend : .env / Pages env vars   -> VITE_APP_NAME, VITE_APP_DOMAIN,

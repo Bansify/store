@@ -1,4 +1,4 @@
-// Kiwi Store - shared types across Web Store, Console, Admin, and Android API
+// Bansify Store - shared types across Web Store, Console, Admin, and Android API
 export type AppStatus = 'draft' | 'in_review' | 'published' | 'unlisted' | 'suspended';
 export type ReviewStatus = 'pending' | 'approved' | 'rejected';
 export type StorageProvider = 'github' | 'd1';
@@ -127,7 +127,7 @@ export interface AccountSlotItem {
   active?: boolean;
 }
 
-export interface GothwadUser {
+export interface BansifyUser {
   id: string;
   username: string;
   name: string;
