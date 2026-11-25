@@ -4,6 +4,7 @@ import {
   LayoutGrid, Library, Search, ShieldCheck, Star, Trophy, X,
 } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
+import { BansifyShell, STORE_SECTIONS } from '../ui/BansifyShell';
 import { fetchAppDetail } from '../lib/api';
 import { usePath } from '../lib/router';
 import {
@@ -403,16 +404,32 @@ export default function StoreApp() {
   else page = <HomePage navigate={navigate} />;
 
   return (
-    <div className="flex min-h-dvh flex-col bg-[#212121] text-neutral-200">
-      <Header navigate={navigate} path={path} />
-      <BackendNotice />
-      <div className="flex-1">{page}</div>
-      <SiteFooter note={`The ${ECOSYSTEM_NAME} ecosystem app store`}>
-        <a className="transition hover:text-neutral-200" href={SITE_URLS.console}>Developer Console</a>
-        <a className="transition hover:text-neutral-200" href={SITE_URLS.storeapp}>{APP_NAME} for Android</a>
-        <span className="flex items-center gap-1.5"><Pill tone="emerald"><ShieldCheck size={11} /> Manually reviewed + F-Droid FOSS</Pill></span>
-      </SiteFooter>
-      <BottomNav navigate={navigate} path={path} />
-    </div>
+    <BansifyShell
+      sections={STORE_SECTIONS}
+      activeSection={STORE_SECTIONS.some((s) => s.id === path) ? path : '/'}
+      onSelect={(id) => navigate(id)}
+      onOpenSettings={() => navigate('/library')}
+      isDark
+      onToggleTheme={() => {
+        document.documentElement.dataset.theme =
+          document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      }}
+      userName={undefined}
+      userEmail={undefined}
+      onAccount={() => {
+        window.location.href = 'https://accounts.bansify.com/account';
+      }}
+      searchPlaceholder="Search apps and games"
+    >
+      <div className="flex h-full min-h-0 flex-col overflow-y-auto text-neutral-200">
+        <BackendNotice />
+        <div className="flex-1">{page}</div>
+        <SiteFooter note={`The ${ECOSYSTEM_NAME} ecosystem app store`}>
+          <a className="transition hover:text-neutral-200" href={SITE_URLS.console}>Developer Console</a>
+          <a className="transition hover:text-neutral-200" href={SITE_URLS.storeapp}>{APP_NAME} for Android</a>
+          <span className="flex items-center gap-1.5"><Pill tone="emerald"><ShieldCheck size={11} /> Manually reviewed + F-Droid FOSS</Pill></span>
+        </SiteFooter>
+      </div>
+    </BansifyShell>
   );
 }
