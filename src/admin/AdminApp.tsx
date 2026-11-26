@@ -4,6 +4,7 @@ import {
   ShieldCheck, Star, X,
 } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
+import { BansifyShell } from '../ui/BansifyShell';
 import { usePath } from '../lib/router';
 import {
   AccountMenu, AppIcon, AuthCallbackView, Button, Card, EmptyState, Logo, PageHeader, Pill, Sheet,
@@ -171,51 +172,33 @@ export default function AdminApp() {
 
   return (
     <Gate>
-      <div className="min-h-dvh bg-[#212121] text-neutral-200 lg:flex">
-        {/* Desktop sidebar */}
-        <aside className="sticky top-0 hidden h-dvh w-[268px] shrink-0 flex-col border-r border-white/[0.07] bg-[#1b1b1b] lg:flex">
-          <div className="flex h-16 items-center border-b border-white/[0.06] px-5"><Logo subtitle="Store Admin" /></div>
-          <div className="mx-3 mt-3 flex items-center gap-3 rounded-xl border border-red-400/20 bg-red-500/[0.07] px-3.5 py-3">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-red-500/15 text-red-200"><ShieldCheck size={17} /></span>
-            <span className="min-w-0">
-              <span className="block truncate text-[13px] font-semibold text-red-100">Administrator</span>
-              <span className="block truncate text-xs text-red-200/60">@{user?.username}</span>
-            </span>
-          </div>
-          <div className="flex-1 overflow-y-auto"><NavList tab={tab} setTab={setTab} counts={counts} /></div>
-          <div className="border-t border-white/[0.06] p-4">
-            <p className="rounded-xl bg-[#242424] p-3.5 text-xs leading-relaxed text-neutral-500">
-              {SITE_HOSTS.admin}<br />Follow the review checklist for every submission. A note is required to reject.
-            </p>
-            <button onClick={signOut} className="mt-3 flex items-center gap-1.5 text-[13px] font-medium text-neutral-400 transition hover:text-white">
-              <LogOut size={15} /> Sign out
-            </button>
-          </div>
-        </aside>
-
-        {/* Mobile top bar + drawer */}
-        <div className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-white/[0.07] bg-[#1b1b1b]/95 px-4 backdrop-blur-xl lg:hidden">
-          <button onClick={() => setDrawer(true)} className="rounded-lg p-2 text-neutral-300 transition hover:bg-white/5 hover:text-white" aria-label="Open menu">
-            <Menu size={20} />
-          </button>
-          <Logo subtitle="Store Admin" />
-          <span className="ml-auto"><AccountMenu size={34} /></span>
-        </div>
-        <Sheet open={drawer} onClose={() => setDrawer(false)} title="Admin menu">
-          <div className="px-3 pt-3">
-            <p className="rounded-xl border border-red-400/20 bg-red-500/[0.07] px-3.5 py-3 text-xs text-red-200">
-              Signed in as <b>@{user?.username}</b> · administrator
-            </p>
-          </div>
-          <NavList tab={tab} setTab={setTab} counts={counts} onNavigate={() => setDrawer(false)} />
-          <div className="border-t border-white/[0.06] p-4">
-            <p className="text-xs text-neutral-500">{SITE_HOSTS.admin}</p>
-            <button onClick={signOut} className="mt-3 flex items-center gap-1.5 text-[13px] font-medium text-neutral-400 hover:text-white">
-              <LogOut size={15} /> Sign out
-            </button>
-          </div>
-        </Sheet>
-
+      <BansifyShell
+        sections={[
+          { id: 'queue', label: 'Review queue', icon: ListChecks },
+          { id: 'apps', label: 'All apps', icon: LayoutDashboard },
+          { id: 'reports', label: 'User reports', icon: Flag },
+        ]}
+        activeSection={tab}
+        onSelect={(id) => setTab(id as Tab)}
+        onOpenSettings={() => setTab('apps')}
+        isDark
+        onToggleTheme={() => {
+          document.documentElement.dataset.theme =
+            document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        }}
+        userName={user?.name || user?.username}
+        userEmail={user?.email}
+        onAccount={() => {
+          window.location.href = 'https://accounts.bansify.com/account';
+        }}
+        searchPlaceholder="Search submissions"
+      >
+      <div className="flex h-full min-h-0 flex-col overflow-y-auto text-neutral-200">
+        <header className="flex h-12 items-center gap-2 border-b border-white/[0.07] px-4 text-sm text-neutral-500">
+          <ShieldCheck size={15} className="text-red-300" />
+          <span className="font-medium text-neutral-200">Store admin</span>
+          <span className="ml-auto text-[11px] text-neutral-500">{SITE_HOSTS.admin}</span>
+        </header>
         <main className="mx-auto w-full max-w-[1180px] flex-1 px-4 py-6 sm:px-6 sm:py-8">
           <BackendNotice />
           {adminStatus === 'loading' && (
@@ -399,8 +382,9 @@ export default function AdminApp() {
             {APP_NAME} Admin · {SITE_HOSTS.admin} · identity by {ECOSYSTEM_NAME} Accounts
           </footer>
         </main>
+        {toastNode}
       </div>
-      {toastNode}
+      </BansifyShell>
     </Gate>
   );
 }
